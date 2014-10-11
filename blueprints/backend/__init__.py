@@ -1,7 +1,15 @@
+from __future__ import with_statement
+import tempfile
+from xhtml2pdf import pisa
+from jinja2 import Template
 import os
 import datetime
+import random
 
-from flask import Blueprint, render_template, session, request
+from contextlib import closing
+from zipfile import ZipFile, ZIP_DEFLATED
+
+from flask import Blueprint, render_template, session, request, make_response
 from sqlalchemy.orm import sessionmaker
 from models import db, Donor, Donation
 
@@ -27,12 +35,24 @@ def generate_zipped_receipts():
     donations = donor.first().donations.all()
     pdfFiles = []
     for donation in donations:
-        data = {'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "chennai", 'DonationMode': donation.mode, 'DonarAddress' : donor.address}
-         pdf = makePdf(data)
-         pdfFiles.append(pdf)
-    #XXXXXX
-    return render_template('test.html')
+        data = {'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "chennai", 'DonationMode': donation.mode, 'DonarAddress' : donor.first().address}
+        pdf = makePdf(data)
+        pdfFiles.append(pdf)
+    s = zipFiles(pdfFiles)
+    response_body = open(s).read()
+    os.remove(s)
+    headers = {"Content-Disposition": "attachment; filename=receipt.zip"}
+    return make_response((response_body,'200', headers))
 
+"""take a list of file names and return a fd for the zipped file"""
+def zipFiles(files):
+    s = str(random.randint(0,10000000))
+    s = "archivename"+s+".zip"    
+    z = ZipFile(s, "w", ZIP_DEFLATED)
+    for f in files:
+        z.write(f, f.split('/')[-1])
+    z.close()
+    return s
 
 """
 gets data to be populated and creates the pdf 

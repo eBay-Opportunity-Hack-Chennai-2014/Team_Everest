@@ -12,3 +12,6 @@ protobuf==2.5.0
 requests==2.2.1
 virtualenv==1.11.4
 wsgiref==0.1.2
+xhtml2pdf
+xlrd
+num2words
