@@ -2,15 +2,17 @@ from __future__ import with_statement
 import tempfile
 from num2words import num2words
 from xhtml2pdf import pisa
+from werkzeug import secure_filename
 from jinja2 import Template
 import os
 import datetime
 import random
+import xlrd
 
 from contextlib import closing
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from flask import Blueprint, render_template, session, request, make_response, send_file, abort
+from flask import Blueprint, render_template, session, request, make_response, send_file, abort, current_app
 from jinja2 import Template
 from xhtml2pdf import pisa
 from sqlalchemy.orm import sessionmaker
@@ -98,3 +100,93 @@ def create_receipt(donation_id):
         return send_file(strIO, attachment_filename='{}.pdf'.format(donation_id), as_attachment=True)
     else:
         abort(400)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in current_app.config.get('ALLOWED_EXTENSIONS')
+
+@backend.route('excel', methods=['POST'])
+def upload():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        r = random.randint(0,10000000)
+        file_name = os.path.join(current_app.config.get('UPLOAD_FOLDER'), str(r) + filename)
+        file.save(os.path.join(file_name))
+        readExcel(file_name)
+        return render_template('test.html') 
+
+
+def readExcel(inputFile):
+    fields = {"DonationDate":"date","Amount":"amount","DonationMode":"mode","ModeDescription":"mode_description","DonorEmail":"email_address","Name":"name","ContactNo":"contact_number","Address":"address"}
+    order_of_fields = {}
+    workbook = xlrd.open_workbook(inputFile)
+    worksheet = workbook.sheet_by_index(0)
+    num_rows = worksheet.nrows - 1 
+    num_cells = worksheet.ncols - 1 
+    curr_row = -1
+    if num_cells > 0:
+        curr_row += 1
+        curr_cell = -1
+        while curr_cell < num_cells:
+            curr_cell += 1
+            cell_value = worksheet.cell_value(curr_row, curr_cell)
+            order_of_fields[cell_value] = curr_cell
+    while curr_row < num_rows:
+        row = []
+        curr_row += 1
+        row = worksheet.row(curr_row)
+        print 'Row:', curr_row
+        curr_cell = -1
+        while curr_cell < num_cells:
+            curr_cell += 1
+            cell_type = worksheet.cell_type(curr_row, curr_cell)
+            cell_value = worksheet.cell_value(curr_row, curr_cell)
+            if(cell_type > 4 or cell_type == 0):
+            	row.append(None)
+            elif(cell_type == 3):
+                year, month, day, hour, minute, second = xlrd.xldate_as_tuple(cell_value, workbook.datemode)
+	        row.append(datetime.datetime(year, month, day, hour, minute, second))
+            else:
+               row.append(cell_value)
+               
+        email = row[order_of_fields["DonorEmail"]].value
+        if not email:
+            raise Exception("no email");
+        donor = get_donor_by_email(email)
+        import pdb
+        pdb.set_trace()
+        if not donor:
+            name = row[order_of_fields["Name"]]
+            if(name.xf_index == None):
+                name = None
+            address = row[order_of_fields["Address"]]
+            if(address.xf_index == None):
+                address = None
+            contact_number = row[order_of_fields["ContactNo"]]
+            if(contact_number.xf_index == None):
+                contact_number = None
+            donor = Donor(email, name, contact_number, address)
+        date = row[order_of_fields["DonationDate"]]
+        if(date.xf_index == None):
+            date = None
+        amount = row[order_of_fields["Amount"]]
+        if(amount.xf_index == None):
+            amount = None
+        mode = row[order_of_fields["DonationMode"]]
+        if(mode.xf_index == None):
+            mode = None
+        mode_description = row[order_of_fields["ModeDescription"]]
+        if(mode_description.xf_index == None):
+            mode_description = None
+        donation = Donation(date, amount, mode, mode_description)
+        donor.donations.append(donation)
+        db.session.add(donor)
+        db.session.commit()  
+        
+def get_donor_by_email(email):
+    import pdb
+    pdb.set_trace()
+    donor = db.session.query(Donor).filter_by(email_address = email)
+    return donor.first()
