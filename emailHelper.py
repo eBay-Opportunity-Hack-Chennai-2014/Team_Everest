@@ -19,7 +19,7 @@ def sendEmail(emailTo,attachmentFile):
   Encoders.encode_base64(part)
 
   if hasattr(attachmentFile,"name"):
-      fileName = attachmentFile.name
+    fileName = attachmentFile.name
   else:
     fileName = "Receipt.pdf"
 
