@@ -87,9 +87,9 @@ function onSubmitAndSend()
 	   <label for="donor" class="col-md-2 control-label">Select Donor </label>
 	   <div class="col-md-2 dropdown">
 	   <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-	   <option value="pragupta@paypal.com">pragupta@paypal.com</option>
-	   <option value="shy@paypal.com">shyam@paypal.com</option>
-	   <option value="laks@paypal.com">laks@paypal.com</option>
+             {% for donor in donors %}
+             <option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
+             {% endfor %}
 	   </select>
 	   </div>
 	   <button type="button" class="btn btn-primary" data-toggle="modal" href="DonorCreation.html" data-target="#myModal">

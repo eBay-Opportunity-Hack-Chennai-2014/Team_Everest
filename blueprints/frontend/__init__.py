@@ -2,6 +2,8 @@ import os
 
 from flask import Blueprint, render_template
 
+from models import Donor
+
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
@@ -19,5 +21,5 @@ def donor_creation_page():
     
 @frontend.route('donate', methods=['GET'])
 def donation_form_page():
-    return render_template('DonationForm.html')
+    return render_template('DonationForm.html', donors = Donor.query.all())
 
