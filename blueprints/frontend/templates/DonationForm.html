@@ -21,6 +21,30 @@ function dropdownChange(value){
       document.getElementById("cash").style.display = "none";
    }
 }
+
+function onSubmitAndDownload()
+{
+    document.Form1.action = "response1.php"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.Form1.submit();             // Submit the page
+    return true;
+}
+
+function onSubmit()
+{
+    document.Form1.action = "response1.php"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.Form1.submit();             // Submit the page
+    return true;
+}
+
+function onSubmitAndSend()
+{
+    document.Form1.action = "response1.php"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.Form1.submit();             // Submit the page
+    return true;
+}
 </script>
 
 <html>
@@ -32,7 +56,7 @@ function dropdownChange(value){
   <body>
     <div class="container">
         <p align="center"> <h3>DONATION FORM</h3> </p>
-      <form class="form-horizontal" method="post" action="backend/donations/" role="form">
+      <form class="form-horizontal" name="form1" method="post" action="backend/donations/" role="form">
 
         <div class="form-group">
          <label for="donationDate" class="col-md-2 control-label">Donation Date </label>
@@ -415,9 +439,9 @@ function dropdownChange(value){
       <div class="form-group">
          <div class="col-md-offset-2 col-md-10">
             <p>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="submit" class="btn btn-primary">Submit and Download e-Receipt</button>
-            <button type="submit" class="btn btn-primary">Submit and Send e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="submit" onClick="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary" name="submitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="submitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
             </p>
          </div>
       </div>
