@@ -15,7 +15,7 @@ from models import db, Donor, Donation
 
 backend = Blueprint('backend', __name__)
 
-@backend.route('/generate_zipped_receipts/', methods=['GET'])
+@backend.route('generate_zipped_receipts/', methods=['GET'])
 def generate_zipped_receipts():
     #email = session.get('email')
     #if email is None:
@@ -72,3 +72,32 @@ def convertHtmlToPdf(sourceHtml):
             sourceHtml,                # the HTML to convert
             dest=resultFile)           # file handle to recieve result
     return resultFile.name
+
+
+@backend.route('donations/', methods=['POST'])
+def create_donation():
+    donor = Donor("email@email.com","name","contact","address")
+    donation = Donation(datetime.datetime.now(), 100, "cash", "desc")
+    donor.donations.append(donation)
+    db.session.add(donor)
+    db.session.commit()
+
+import StringIO
+def create_receipt_pdf(donation_id):
+    donation = Donation.query.get(donation_id)
+    if donation is None:
+        return None
+    with open("receipt_template.html") as template_file:
+        html = Template(template_file.read()).render({'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "Chennai", 'DonationMode': donation.mode, 'DonarAddress' : donation.donor.address})
+        strIO = StringIO.StringIO()
+        pisa.CreatePDF(html, dest=strIO)
+        return strIO
+
+@backend.route('donations/<int:donation_id>/receipt/', methods=['GET'])
+def create_receipt(donation_id):
+    strIO = create_receipt_pdf(donation_id)
+    if strIO is not None:
+        strIO.seek(0)
+        return send_file(strIO, attachment_filename='{}.pdf'.format(donation_id), as_attachment=True)
+    else:
+        abort(400)
