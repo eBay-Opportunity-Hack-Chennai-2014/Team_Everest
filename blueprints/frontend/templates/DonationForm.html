@@ -32,19 +32,19 @@ function dropdownChange(value){
   <body>
     <div class="container">
         <p align="center"> <h3>DONATION FORM</h3> </p>
-      <form class="form-horizontal" role="form">
+      <form class="form-horizontal" method="post" action="backend/donations/" role="form">
 
-      <div class="form-group">
+        <div class="form-group">
          <label for="donationDate" class="col-md-2 control-label">Donation Date </label>
          <div class="col-md-2">
-            <input type="date" class="form-control" id="donationDate">
+            <input type="date" class="form-control" id="donationDate" name="donationDate">
          </div>
       </div>
 
       <div class="form-group">
          <label for="donationAmount" class="col-md-2 control-label">Donation Amount </label>
          <div class="col-md-2">
-            <input type="number" class="form-control" id="donationAmount">
+            <input type="number" class="form-control" id="donationAmount" name="donationAmount">
          </div>
       </div>
 
@@ -63,9 +63,9 @@ function dropdownChange(value){
 	   <label for="donor" class="col-md-2 control-label">Select Donor </label>
 	   <div class="col-md-2 dropdown">
 	   <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-	   <option value="1">bram@paypal.com</option>
-	   <option value="2">shyam@paypal.com</option>
-	   <option value="3">laks@paypal.com</option>
+	   <option value="bram@paypal.com">bram@paypal.com</option>
+	   <option value="shy@paypal.com">shyam@paypal.com</option>
+	   <option value="laks@paypal.com">laks@paypal.com</option>
 	   </select>
 	   </div>
 	   <button type="button" class="btn btn-primary" data-toggle="modal" href="DonorCreation.html" data-target="#myModal">
@@ -94,14 +94,14 @@ function dropdownChange(value){
       <div class="form-group">
          <label for="chequeDate" class="col-md-2 control-label">Cheque Date </label>
          <div class="col-md-2">
-            <input type="date" class="form-control" id="chequeDate">
+            <input type="date" class="form-control" id="chequeDate" name="chequeDate">
          </div>
       </div>
 
       <div class="form-group">
          <label for="chequeNumber" class="col-md-2 control-label">Cheque Number </label>
          <div class="col-md-2">
-            <input type="number" class="form-control" id="chequeNumber">
+            <input type="number" class="form-control" id="chequeNumber" name="chequeNumber">
          </div>
       </div>
 
@@ -111,7 +111,7 @@ function dropdownChange(value){
       <div class="form-group">
          <label for="transactionId" class="col-md-2 control-label">Transaction Id </label>
          <div class="col-md-2">
-            <input type="number" class="form-control" id="transactionId">
+            <input type="number" class="form-control" id="transactionId" name="transactionId">
          </div>
       </div>
    </div>
@@ -130,7 +130,7 @@ function dropdownChange(value){
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   </body>
 </html>
 

@@ -35,14 +35,33 @@ backend = Blueprint('backend', __name__)
 #     #XXXXXX
 #     return render_template('test.html')
 #
+@backend.route('donors/', methods=['POST'])
+def create_donor():
+    pass
 
 @backend.route('donations/', methods=['POST'])
 def create_donation():
-    donor = Donor("email@email.com","name","contact","address")
-    donation = Donation(datetime.datetime.now(), 100, "cash", "desc")
+    print(request.form)
+    donor = Donor.query.filter_by(email_address=request.form['donor']).first()
+    if donor is None:
+        donor = Donor(email_address=request.form['donor'])
+        db.session.add(donor)
+        db.session.commit()
+    donation = Donation(date=request.form['donationDate'],
+                        amount=request.form['donationAmount'],
+                        mode=request.form['donationMode'],
+                        cheque_number=request.form['chequeNumber'],
+                        cheque_date=request.form['chequeDate'],
+                        transcation_id=request.form['transactionId'])
     donor.donations.append(donation)
     db.session.add(donor)
     db.session.commit()
+    strIO = create_receipt_pdf(donation.id)
+    if strIO is not None:
+        strIO.seek(0)
+        return send_file(strIO, attachment_filename='{}.pdf'.format(donation.id), as_attachment=True)
+    else:
+        abort(400)
 
 import StringIO
 def create_receipt_pdf(donation_id):
