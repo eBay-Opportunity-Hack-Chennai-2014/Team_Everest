@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config.from_object('default_settings')
 app.config.from_envvar('EVEREST_SETTINGS', silent=True)
 app.register_blueprint(frontend, url_prefix='/')
+app.register_blueprint(backend, url_prefix='/backend')
 
 db.init_app(app)
 
