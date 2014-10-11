@@ -11,10 +11,17 @@
       <div class="col-md-4 col-md-offset-4 vert-offset-top-2">
       <h2>File Upload</h2>
       <form class="form-horizontal" role="form">
+      <div class="col-md-8 col-md-offset-0">
         <div class="form-group">
           <input type="file" name="File Upload" id="txtFileUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+        <div class="checkbox">
+		  <label>
+		     <input type="checkbox"> Download in .zip format? </label>
+        </div>
+
+       <button type="submit" class="btn btn-primary">Submit</button>
       </form>
       <div class="form-group">
 	  		  <label for="pwd">Template File:</label>
