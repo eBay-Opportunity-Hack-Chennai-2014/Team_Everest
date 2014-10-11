@@ -7,12 +7,26 @@ class Donor(db.Model):
     email_address = db.Column(db.String(80), unique=True)
     name = db.Column(db.String(80))
     contact_number = db.Column(db.String(20))
+    password = db.Column(db.String(20))
     donations = db.relationship('Donation', backref='donor', lazy='dynamic')
 
     def __init__(self, email_address, name, contact_number):
         self.email_address = email_address
         self.name = name
         self.contact_number = contact_number
+
+class User(db.Model):
+  """The internal user who wants to login"""
+  name = db.Column(db.String(80))
+  password = db.Column(db.String(80))
+
+  def __init__(self, name, password):
+    self.name = name
+    self.password = password
+
+  def check_password(self, password):
+    return self.password is password
+    # hashlib.sha224(password).hexdigest()==self.password
 
 # class NGO(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
