@@ -21,7 +21,7 @@ from emailHelper import sendEmail
 
 backend = Blueprint('backend', __name__)
 
-@backend.route('donors/', methods=['POST'])
+@backend.route('create_donor/', methods=['POST'])
 def create_donor():
     pass
 
