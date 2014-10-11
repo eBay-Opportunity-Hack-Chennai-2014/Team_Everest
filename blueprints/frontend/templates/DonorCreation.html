@@ -1,4 +1,34 @@
 <!DOCTYPE html>
+<script type="text/javascript">
+
+function onSubmit()
+{
+    document.form1.action = "backend/create_donor"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
+
+function onSave()
+{
+    document.form1.action = "response1.php"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
+
+function reset()
+{
+    document.getElementById("inputName").value = "";
+    document.getElementById("inputPhone").value = "";
+    document.getElementById("inputEmail").value = "";
+    document.getElementById("inputAddress").value = "";
+    document.getElementById("inputTown").value = "";
+    document.getElementById("inputCountry").value = "";
+}
+
+
+</script>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,14 +42,14 @@
   <div class="form-group">
     <label for="inputNameLabel" class="col-sm-2 control-label">Name</label>
     <div class="col-md-4">
-      <input type="text" class="form-control" id="inputName" placeholder="Name">
+      <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
     </div>
   </div>
 
 <div class="form-group">
     <label for="inputPhoneLabel" class="col-sm-2 control-label">Contact No:</label>
     <div class="col-md-4">
-      <input type="tel" class="form-control" id="inputPhone" placeholder="Phone">
+      <input type="tel" class="form-control" id="inputPhone" placeholder="Phone" name="contact_number">
 
     </div>
   </div>
@@ -27,28 +57,28 @@
 <div class="form-group">
     <label for="inputEmailLabel" class="col-sm-2 control-label">Email</label>
     <div class="col-md-4">
-      <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+      <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email">
     </div>
   </div>
 
 <div class="form-group">
     <label for="inputAddressLabel" class="col-sm-2 control-label">Address</label>
     <div class="col-md-4">
-      <textarea class="form-control" id="inputAddress" rows="4" placeholder="Address"></textarea>
+      <textarea class="form-control" id="inputAddress" rows="4" placeholder="Address" name="address"></textarea>
    </div>
    </div>
 
    <div class="form-group">
     <label for="inputTownLabel" class="col-sm-2 control-label">Town/City</label>
     <div class="col-md-2">
-      <input type="text" class="form-control" id="inputTown" placeholder="Town or City">
+      <input type="text" class="form-control" id="inputTown" placeholder="Town or City" name="city">
     </div>
    </div>
 
    <div class="form-group">
     <label for="inputCountryLabel" class="col-sm-2 control-label">Country</label>
     <div class="col-md-2">
-      <select class="form-control" id="inputCountry" placeholder="Country">
+      <select class="form-control" id="inputCountry" placeholder="Country" name="country">
 	  	<option value="Afghanistan" title="Afghanistan">Afghanistan</option>
 	  	<option value="Åland Islands" title="Åland Islands">Åland Islands</option>
 	  	<option value="Albania" title="Albania">Albania</option>
@@ -304,9 +334,10 @@
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Save</button>
-      <button type="reset" class="btn btn-default">Reset</button>
-      <button type="cancel" class="btn btn-default">Cancel</button>
+      <button type="submit" class="btn btn-default" onClick="onSave()">Save</button>
+      <button type="reset" class="btn btn-default" onClick="resetButton()">Reset</button>
+      <!--<button type="cancel" class="btn btn-default" onClick="DonationForm.html">Cancel</button> -->
+      <a class="btn btn-primary" href="DonationForm.html" role="button">Cancel</a>
     </div>
   </div>
 </form>

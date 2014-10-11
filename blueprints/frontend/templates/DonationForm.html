@@ -21,6 +21,30 @@ function dropdownChange(value){
       document.getElementById("cash").style.display = "none";
    }
 }
+
+function onSubmitAndDownload()
+{
+    document.form1.action = "backend/create_donation_and_return_pdf/"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
+
+function onSubmit()
+{
+    document.form1.action = "backend/create_donation/"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
+
+function onSubmitAndSend()
+{
+    document.form1.action = "backend/create_donation_and_email_pdf/"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
 </script>
 
 <html>
@@ -32,7 +56,7 @@ function dropdownChange(value){
   <body>
     <div class="container">
         <p align="center"> <h3>DONATION FORM</h3> </p>
-      <form class="form-horizontal" method="post" action="backend/donations/" role="form">
+      <form class="form-horizontal" id="form1" name="form1" method="post" role="form">
 
         <div class="form-group">
          <label for="donationDate" class="col-md-2 control-label">Donation Date </label>
@@ -63,9 +87,9 @@ function dropdownChange(value){
 	   <label for="donor" class="col-md-2 control-label">Select Donor </label>
 	   <div class="col-md-2 dropdown">
 	   <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-	   <option value="bram@paypal.com">bram@paypal.com</option>
-	   <option value="shy@paypal.com">shyam@paypal.com</option>
-	   <option value="laks@paypal.com">laks@paypal.com</option>
+             {% for donor in donors %}
+             <option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
+             {% endfor %}
 	   </select>
 	   </div>
 	   <button type="button" class="btn btn-primary" data-toggle="modal" href="DonorCreation.html" data-target="#myModal">
@@ -415,9 +439,9 @@ function dropdownChange(value){
       <div class="form-group">
          <div class="col-md-offset-2 col-md-10">
             <p>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="submit" class="btn btn-primary">Submit and Download e-Receipt</button>
-            <button type="submit" class="btn btn-primary">Submit and Send e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="formSubmit" onClick="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
             </p>
          </div>
       </div>
