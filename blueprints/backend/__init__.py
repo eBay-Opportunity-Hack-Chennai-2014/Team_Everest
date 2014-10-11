@@ -6,15 +6,18 @@ from jinja2 import Template
 import os
 import datetime
 import random
+import StringIO
 
 from contextlib import closing
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from flask import Blueprint, render_template, session, request, send_file, abort
+from flask import Blueprint, render_template, session, request, send_file, abort, redirect, url_for
 from jinja2 import Template
 from xhtml2pdf import pisa
 from sqlalchemy.orm import sessionmaker
 from models import db, Donor, Donation
+
+from emailHelper import sendEmail
 
 backend = Blueprint('backend', __name__)
 
@@ -22,23 +25,31 @@ backend = Blueprint('backend', __name__)
 def create_donor():
     pass
 
-@backend.route('donations/', methods=['POST'])
-def create_donation():
-    print(request.form)
-    donor = Donor.query.filter_by(email_address=request.form['donor']).first()
+def create_donation(form):
+    donor = Donor.query.filter_by(email_address=form['donor']).first()
     if donor is None:
-        donor = Donor(email_address=request.form['donor'])
+        donor = Donor(email_address=form['donor'])
         db.session.add(donor)
         db.session.commit()
-    donation = Donation(date=request.form['donationDate'],
-                        amount=request.form['donationAmount'],
-                        mode=request.form['donationMode'],
-                        cheque_number=request.form['chequeNumber'],
-                        cheque_date=request.form['chequeDate'],
-                        transcation_id=request.form['transactionId'])
+    donation = Donation(date=form['donationDate'],
+                        amount=form['donationAmount'],
+                        mode=form['donationMode'],
+                        cheque_number=form['chequeNumber'],
+                        cheque_date=form['chequeDate'],
+                        transcation_id=form['transactionId'])
     donor.donations.append(donation)
     db.session.add(donor)
     db.session.commit()
+    return donation
+
+@backend.route('donations/', methods=['POST'])
+def create_donation_and_return():
+    donation = create_donation(request.form)
+    return redirect('donate')
+
+@backend.route('donations/', methods=['POST'])
+def create_donation_and_return_pdf():
+    donation = create_donation(request.form)
     strIO = create_receipt_pdf(donation.id)
     if strIO is not None:
         strIO.seek(0)
@@ -46,7 +57,17 @@ def create_donation():
     else:
         abort(400)
 
-import StringIO
+@backend.route('donations/', methods=['POST'])
+def create_donation_and_email_pdf():
+    donation = create_donation(request.form)
+    strIO = create_receipt_pdf(donation.id)
+    if strIO is not None:
+        strIO.seek(0)
+        sendEmail(donation.donor.email_address, strIO)
+        return redirect('donate')
+    else:
+        abort(400)
+
 def create_receipt_pdf(donation_id):
     donation = Donation.query.get(donation_id)
     if donation is None:
