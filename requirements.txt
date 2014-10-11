@@ -17,4 +17,10 @@ requests==2.2.1
 six==1.8.0
 virtualenv==1.11.4
 wsgiref==0.1.2
+<<<<<<< HEAD
 xhtml2pdf==0.0.6
+=======
+xhtml2pdf
+xlrd
+num2words
+>>>>>>> 4378d63c25c4165275d0aeb4c8f87b7f42c1f49a
