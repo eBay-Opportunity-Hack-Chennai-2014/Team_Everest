@@ -6,7 +6,7 @@ from wtforms import TextField, PasswordField, validators
 import sys
 sys.path.append("..")
 from modules.login_manager import loginManager
-from models import db
+from models import db, User
 
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
@@ -23,9 +23,8 @@ class LoginForm(Form):
     rv = Form.validate(self)
     if not rv:
       return False
-
-    user = db.User.query.filter_by(
-        name=self.email_address.data).first()
+    user = User.query.filter_by(
+        name=self.name.data).first()
     if user is None:
       self.name.errors.append('Unknown username')
       return False
@@ -39,7 +38,13 @@ class LoginForm(Form):
 
 @frontend.route('', methods=['GET'])
 def test_page():
-    return render_template('test.html')
+  return render_template('test.html')
+
+@frontend.route('registerNew', methods = ["POST"])
+def create_user():
+  user = User("user@everest.com","pass123")
+  db.session.add(user)
+  db.session.commit()
 
 @frontend.route("login", methods=["GET", "POST"])
 def login():
@@ -57,8 +62,8 @@ def login():
 def donor_creation_page():
     return render_template('DonorCreation.html')
 
-@login_required
 @frontend.route('donate', methods=['GET'])
+@login_required
 def donation_form_page():
     return render_template('DonationForm.html')
 

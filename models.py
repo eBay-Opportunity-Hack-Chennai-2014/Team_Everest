@@ -3,20 +3,25 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Donor(db.Model):
+    __tablename__ =  'donor'
     id = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String(80), unique=True)
     name = db.Column(db.String(80))
+    address = db.Column(db.String(1000))
     contact_number = db.Column(db.String(20))
     password = db.Column(db.String(20))
     donations = db.relationship('Donation', backref='donor', lazy='dynamic')
 
-    def __init__(self, email_address, name, contact_number):
+    def __init__(self, email_address, name, contact_number, address):
         self.email_address = email_address
         self.name = name
         self.contact_number = contact_number
+        self.address = address
 
 class User(db.Model):
+  __tablename__ =  'user'
   """The internal user who wants to login"""
+  id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(80))
   password = db.Column(db.String(80))
 
@@ -38,22 +43,16 @@ class User(db.Model):
 #         self.name = name
 
 class Donation(db.Model):
+    __tablename__ = 'donation'
     id = db.Column(db.Integer, primary_key=True)
     donor_id = db.Column(db.Integer, db.ForeignKey('donor.id'))
-    receipt_number = db.Column(db.String(20))
     date = db.Column(db.DateTime)
     amount = db.Column(db.Integer)
     mode = db.Column(db.String(20))
-    cheque_date = db.Column(db.DateTime)
-    cheque_number = db.Column(db.String(20))
-    transaction_id = db.Column(db.String(20))
+    mode_description = db.Column(db.String(200))
 
-    def __init__(receipt_number, date, amount, mode, cheque_date='', cheque_number='', transaction_id = ''):
-        self.receipt_number = receipt_number
+    def __init__(self, date, amount, mode, mode_description = ''):
         self.date = date
         self.amount = amount
         self.mode = mode
         self.mode_description = mode_description
-        self.cheque_data = cheque_data
-        self.cheque_number = cheque_number
-        self.transaction_id = transaction_id

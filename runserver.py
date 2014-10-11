@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config.from_object('default_settings')
 app.config.from_envvar('EVEREST_SETTINGS', silent=True)
 app.register_blueprint(frontend, url_prefix='/')
-app.register_blueprint(backend, url_prefix='/backend')
+app.register_blueprint(backend, url_prefix='/backend/')
 app.secret_key = 'why would I tell you my secret key?'
 
 loginManager.init_app(app)
@@ -19,10 +19,7 @@ loginManager.init_app(app)
 def load_user(userid):
   return db.Donor.get(userid)
 
-
 loginManager.login_view = '/login'
-
-loginManager.login_message = "Please login to continue with the application"
 
 db.init_app(app)
 
