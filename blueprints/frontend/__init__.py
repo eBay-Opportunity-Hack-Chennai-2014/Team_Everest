@@ -9,15 +9,15 @@ frontend = Blueprint('frontend', __name__,
 def test_page():
     return render_template('test.html')
     
-@frontend.route('/login', methods=['GET'])
-def test_page():
+@frontend.route('login', methods=['GET'])
+def login_page():
     return render_template('Login.html')
     
-@frontend.route('/createDonor', methods=['GET'])
-def test_page():
+@frontend.route('createDonor', methods=['GET'])
+def donor_creation_page():
     return render_template('DonorCreation.html')
     
-@frontend.route('/donate', methods=['GET'])
-def test_page():
+@frontend.route('donate', methods=['GET'])
+def donation_form_page():
     return render_template('DonationForm.html')
 
