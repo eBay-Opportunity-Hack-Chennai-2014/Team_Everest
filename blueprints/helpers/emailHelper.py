@@ -3,7 +3,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email import Encoders
 
-#Email sending module. Takes 2 arguments, receiver mail id and the filename of attachment. Attachment is assumed to be on disk.
+#Email sending module. Takes 2 arguments, receiver mail id and the fileObject of attachment. Attachment is assumed to be on disk.
 
 def sendEmail(emailTo,attachmentFile):
   emailTo= "nks.22.1992@gmail.com"
@@ -16,10 +16,10 @@ def sendEmail(emailTo,attachmentFile):
   msg['From'] = EMAIL_FROM
   msg['To'] = emailTo
   part = MIMEBase('application', "octet-stream")
-  part.set_payload(open(attachmentFile, "rb").read())
+  part.set_payload(attachmentFile).read())
   Encoders.encode_base64(part)
 
-  part.add_header('Content-Disposition', 'attachment; filename='+attachmentFile)
+  part.add_header('Content-Disposition', 'attachment; filename='+attachmentFile.name)
 
   msg.attach(part)
 
