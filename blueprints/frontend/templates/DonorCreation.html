@@ -3,7 +3,7 @@
 
 function onSubmit()
 {
-    document.form1.action = "backend/create_donor"
+    document.form1.action = "backend/create_donation"
     // document.Form1.target = "_blank";    // Open in a new window
     document.form1.submit();             // Submit the page
     return true;
@@ -11,7 +11,7 @@ function onSubmit()
 
 function onSave()
 {
-    document.form1.action = "response1.php"
+    document.form1.action = "backend/create_donor"
     // document.Form1.target = "_blank";    // Open in a new window
     document.form1.submit();             // Submit the page
     return true;
@@ -336,8 +336,7 @@ function reset()
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-default" onClick="onSave()">Save</button>
       <button type="reset" class="btn btn-default" onClick="resetButton()">Reset</button>
-      <!--<button type="cancel" class="btn btn-default" onClick="DonationForm.html">Cancel</button> -->
-      <a class="btn btn-primary" href="DonationForm.html" role="button">Cancel</a>
+      <button type="cancel" class="btn btn-default" onClick="DonationForm.html">Cancel</button>
     </div>
   </div>
 </form>
