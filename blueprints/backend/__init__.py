@@ -153,16 +153,20 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in current_app.config.get('ALLOWED_EXTENSIONS')
 
-@backend.route('excel', methods=['POST'])
+@backend.route('excel', methods=['POST', 'GET'])
 def upload():
-    file = request.files['file']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        r = random.randint(0,10000000)
-        file_name = os.path.join(current_app.config.get('UPLOAD_FOLDER'), str(r) + filename)
-        file.save(os.path.join(file_name))
-        readExcel(file_name)
-        return render_template('test.html') 
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            r = random.randint(0,10000000)
+            file_name = os.path.join(current_app.config.get('UPLOAD_FOLDER'), str(r) + filename)
+            file.save(os.path.join(file_name))
+            readExcel(file_name)
+            return render_template("BulkUploadSuccess.html") 
+    else:
+            print "sda"
+            return render_template("BulkUpload.html")
 
 
 def readExcel(inputFile):
@@ -202,8 +206,6 @@ def readExcel(inputFile):
         if not email:
             raise Exception("no email");
         donor = get_donor_by_email(email)
-        import pdb
-        pdb.set_trace()
         if not donor:
             name = row[order_of_fields["Name"]]
             if(name.xf_index == None):
@@ -233,7 +235,5 @@ def readExcel(inputFile):
         db.session.commit()  
         
 def get_donor_by_email(email):
-    import pdb
-    pdb.set_trace()
     donor = db.session.query(Donor).filter_by(email_address = email)
     return donor.first()
