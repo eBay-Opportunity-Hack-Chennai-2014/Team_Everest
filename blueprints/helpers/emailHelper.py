@@ -16,10 +16,15 @@ def sendEmail(emailTo,attachmentFile):
   msg['From'] = EMAIL_FROM
   msg['To'] = emailTo
   part = MIMEBase('application', "octet-stream")
-  part.set_payload(attachmentFile).read())
+  part.set_payload(attachmentFile).read()
   Encoders.encode_base64(part)
 
-  part.add_header('Content-Disposition', 'attachment; filename='+attachmentFile.name)
+  if hasattr(attachmentFile,"name"):
+    fileName = attachmentFile.name
+  else:
+    fileName = "Receipt.pdf"
+
+  part.add_header('Content-Disposition', 'attachment; filename='+fileName)
 
   msg.attach(part)
 
