@@ -24,25 +24,25 @@ function dropdownChange(value){
 
 function onSubmitAndDownload()
 {
-    document.Form1.action = "response1.php"
+    document.form1.action = "backend/create_donation_and_return_pdf/"
     // document.Form1.target = "_blank";    // Open in a new window
-    document.Form1.submit();             // Submit the page
+    document.form1.submit();             // Submit the page
     return true;
 }
 
 function onSubmit()
 {
-    document.Form1.action = "response1.php"
+    document.form1.action = "backend/create_donation/"
     // document.Form1.target = "_blank";    // Open in a new window
-    document.Form1.submit();             // Submit the page
+    document.form1.submit();             // Submit the page
     return true;
 }
 
 function onSubmitAndSend()
 {
-    document.Form1.action = "response1.php"
+    document.form1.action = "backend/create_donation_and_email_pdf/"
     // document.Form1.target = "_blank";    // Open in a new window
-    document.Form1.submit();             // Submit the page
+    document.form1.submit();             // Submit the page
     return true;
 }
 </script>
@@ -56,7 +56,7 @@ function onSubmitAndSend()
   <body>
     <div class="container">
         <p align="center"> <h3>DONATION FORM</h3> </p>
-      <form class="form-horizontal" name="form1" method="post" action="backend/donations/" role="form">
+      <form class="form-horizontal" id="form1" name="form1" method="post" role="form">
 
         <div class="form-group">
          <label for="donationDate" class="col-md-2 control-label">Donation Date </label>
@@ -87,7 +87,7 @@ function onSubmitAndSend()
 	   <label for="donor" class="col-md-2 control-label">Select Donor </label>
 	   <div class="col-md-2 dropdown">
 	   <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-	   <option value="bram@paypal.com">bram@paypal.com</option>
+	   <option value="pragupta@paypal.com">pragupta@paypal.com</option>
 	   <option value="shy@paypal.com">shyam@paypal.com</option>
 	   <option value="laks@paypal.com">laks@paypal.com</option>
 	   </select>
@@ -439,9 +439,9 @@ function onSubmitAndSend()
       <div class="form-group">
          <div class="col-md-offset-2 col-md-10">
             <p>
-            <button type="submit" class="btn btn-primary" name="submit" onClick="onSubmit()">Submit</button>
-            <button type="submit" class="btn btn-primary" name="submitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
-            <button type="submit" class="btn btn-primary" name="submitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="formSubmit" onClick="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
+            <button type="submit" class="btn btn-primary" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
             </p>
          </div>
       </div>

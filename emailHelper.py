@@ -15,7 +15,7 @@ def sendEmail(emailTo,attachmentFile):
   msg['From'] = EMAIL_FROM
   msg['To'] = emailTo
   part = MIMEBase('application', "octet-stream")
-  part.set_payload(attachmentFile).read()
+  part.set_payload(attachmentFile.read())
   Encoders.encode_base64(part)
 
   if hasattr(attachmentFile,"name"):

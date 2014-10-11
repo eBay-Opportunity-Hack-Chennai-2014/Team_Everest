@@ -42,12 +42,12 @@ def create_donation(form):
     db.session.commit()
     return donation
 
-@backend.route('donations/', methods=['POST'])
+@backend.route('create_donation/', methods=['POST'])
 def create_donation_and_return():
     donation = create_donation(request.form)
-    return redirect('donate')
+    return redirect(request.referrer)
 
-@backend.route('donations/', methods=['POST'])
+@backend.route('create_donation_and_return_pdf/', methods=['POST'])
 def create_donation_and_return_pdf():
     donation = create_donation(request.form)
     strIO = create_receipt_pdf(donation.id)
@@ -57,14 +57,14 @@ def create_donation_and_return_pdf():
     else:
         abort(400)
 
-@backend.route('donations/', methods=['POST'])
+@backend.route('create_donation_and_email_pdf/', methods=['POST'])
 def create_donation_and_email_pdf():
     donation = create_donation(request.form)
     strIO = create_receipt_pdf(donation.id)
     if strIO is not None:
         strIO.seek(0)
         sendEmail(donation.donor.email_address, strIO)
-        return redirect('donate')
+        return redirect(request.referrer)
     else:
         abort(400)
 
