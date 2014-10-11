@@ -10,13 +10,61 @@ import random
 from contextlib import closing
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from flask import Blueprint, render_template, session, request, make_response, send_file, abort
+from flask import Blueprint, render_template, session, request, send_file, abort
 from jinja2 import Template
 from xhtml2pdf import pisa
 from sqlalchemy.orm import sessionmaker
 from models import db, Donor, Donation
 
 backend = Blueprint('backend', __name__)
+
+@backend.route('donors/', methods=['POST'])
+def create_donor():
+    pass
+
+@backend.route('donations/', methods=['POST'])
+def create_donation():
+    print(request.form)
+    donor = Donor.query.filter_by(email_address=request.form['donor']).first()
+    if donor is None:
+        donor = Donor(email_address=request.form['donor'])
+        db.session.add(donor)
+        db.session.commit()
+    donation = Donation(date=request.form['donationDate'],
+                        amount=request.form['donationAmount'],
+                        mode=request.form['donationMode'],
+                        cheque_number=request.form['chequeNumber'],
+                        cheque_date=request.form['chequeDate'],
+                        transcation_id=request.form['transactionId'])
+    donor.donations.append(donation)
+    db.session.add(donor)
+    db.session.commit()
+    strIO = create_receipt_pdf(donation.id)
+    if strIO is not None:
+        strIO.seek(0)
+        return send_file(strIO, attachment_filename='{}.pdf'.format(donation.id), as_attachment=True)
+    else:
+        abort(400)
+
+import StringIO
+def create_receipt_pdf(donation_id):
+    donation = Donation.query.get(donation_id)
+    if donation is None:
+        return None
+    with open("receipt_template.html") as template_file:
+        html = Template(template_file.read()).render({'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "Chennai", 'DonationMode': donation.mode, 'DonarAddress' : donation.donor.address})
+        strIO = StringIO.StringIO()
+        pisa.CreatePDF(html, dest=strIO)
+        return strIO
+
+@backend.route('donations/<int:donation_id>/receipt/', methods=['GET'])
+def create_receipt(donation_id):
+    strIO = create_receipt_pdf(donation_id)
+    if strIO is not None:
+        strIO.seek(0)
+        return send_file(strIO, attachment_filename='{}.pdf'.format(donation_id), as_attachment=True)
+    else:
+        abort(400)
 
 @backend.route('generate_zipped_receipts/', methods=['GET'])
 def generate_zipped_receipts():
@@ -50,51 +98,3 @@ def zipFiles(files):
         z.write(f, f.split('/')[-1])
     z.close()
     return s
-
-"""
-gets data to be populated and creates the pdf 
-"""
-def makePdf(data):
-    if not data:
-        raise Exception("null data in makeHtml");
-    templateString = open("receipt_template.html").read()
-    template = Template(templateString)    
-    html = template.render(data)
-    return convertHtmlToPdf(html)
-
-def convertHtmlToPdf(sourceHtml):
-    resultFile = tempfile.NamedTemporaryFile(prefix='receipt_', suffix='.pdf', dir='/tmp', delete=False)
-    # convert HTML to PDF 
-    pisaStatus = pisa.CreatePDF(
-            sourceHtml,                # the HTML to convert
-            dest=resultFile)           # file handle to recieve result
-    return resultFile.name
-
-
-@backend.route('donations/', methods=['POST'])
-def create_donation():
-    donor = Donor("email@email.com","name","contact","address")
-    donation = Donation(datetime.datetime.now(), 100, "cash", "desc")
-    donor.donations.append(donation)
-    db.session.add(donor)
-    db.session.commit()
-
-import StringIO
-def create_receipt_pdf(donation_id):
-    donation = Donation.query.get(donation_id)
-    if donation is None:
-        return None
-    with open("receipt_template.html") as template_file:
-        html = Template(template_file.read()).render({'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "chennai", 'Don    ationMode': donation.mode, 'DonorName':donor.first().name, 'DonorAddress' : donor.first().address, 'Certification_Number' : "213213dsfdaf3", "WordAmount":    num2words(donation.amount) })
-        strIO = StringIO.StringIO()
-        pisa.CreatePDF(html, dest=strIO)
-        return strIO
-
-@backend.route('donations/<int:donation_id>/receipt/', methods=['GET'])
-def create_receipt(donation_id):
-    strIO = create_receipt_pdf(donation_id)
-    if strIO is not None:
-        strIO.seek(0)
-        return send_file(strIO, attachment_filename='{}.pdf'.format(donation_id), as_attachment=True)
-    else:
-        abort(400)
