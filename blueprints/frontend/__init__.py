@@ -122,7 +122,7 @@ def view_donations():
             donation_ids = donor_accessible_donation_ids
             donations=Donation.query.filter(Donation.id.in_(donation_ids)).all()
             print donations
-            return generate_zipped_receipts(donor, donations,isemail)
+        return generate_zipped_receipts(donor, donations,isemail)
 donation_made_text = '''Dear Donor,
 
   Thank you for making a difference by donating for Team Everest.  Please find your E-receips tattached with this email for your donation.
