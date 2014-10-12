@@ -1,10 +1,12 @@
+import hashlib
+
 from flask import Flask,session
-from modules.login_manager import loginManager
 
 from blueprints.frontend import frontend
 from blueprints.backend import backend
 
-from models import db
+from models import db, Donor
+from login_manager import lm
 
 app = Flask(__name__)
 app.config.from_object('default_settings')
@@ -15,13 +17,15 @@ app.secret_key = 'why would I tell you my secret key?'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = set([ 'xls', 'xlsx', 'csv'])
 
-loginManager.init_app(app)
-
-loginManager.login_view = '/login'
-
 db.init_app(app)
+lm.init_app(app)
+lm.login_view = '/login'
 
 if __name__ == '__main__':
-  with app.app_context():
-      db.create_all()
-  app.run(host='0.0.0.0', port=8000)
+    with app.app_context():
+        db.create_all()
+        if Donor.query.filter_by(email_address="admin@gmail.com").first() is None:
+            donor = Donor(email_address='admin@gmail.com', password_sha256=hashlib.sha256('1111').hexdigest(), is_admin=True)
+            db.session.add(donor)
+            db.session.commit()
+    app.run(host='0.0.0.0', port=8000)

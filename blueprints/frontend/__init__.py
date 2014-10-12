@@ -7,7 +7,7 @@ from wtforms import TextField, PasswordField, validators
 import sys
 sys.path.append("..")
 from modules.login_manager import loginManager
-from models import db, Donor, Donation, User
+from models import db, Donor, Donation
 import tempfile
 from num2words import num2words
 from xhtml2pdf import pisa
@@ -30,7 +30,6 @@ from models import db, Donor, Donation
 
 from emailHelper import sendEmail
 
-
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
@@ -39,56 +38,27 @@ def load_user(userid):
   print 'Load user being done '
   return User.query.filter_by(name=userid).first()
 
-class LoginForm(Form):
-  name = TextField('Username', [validators.Required()])
-  password = PasswordField('Password', [validators.Required()])
-  def __init__(self, *args, **kwargs):
-      Form.__init__(self, *args, **kwargs)
-      self.user = None
-
-  def validate(self):
-    userObj =  User.query.all()[0]
-    rv = Form.validate(self)
-    if not rv:
-      return False
-    user = User.query.filter_by(
-        name=self.name.data)
-
-    if user is None:
-      self.name.errors.append('Unknown username')
-      return False
-
-    user = User.query.filter_by(
-        password=self.password.data)
-
-    if user is None:
-      self.password.errors.append('Invalid password')
-      return False
-
-    self.user = user.first()
-    return True
-
-@frontend.route('', methods=['GET'])
-def test_page():
-  return render_template('test.html')
-
-@frontend.route('registerNew', methods = ["POST"])
-def create_user():
-  user = User("user@everest.com","pass123")
-  db.session.add(user)
-  db.session.commit()
-
 @frontend.route('donate', methods=['GET'])
 def donation_form_page():
     return render_template('DonationForm.html', donors=Donor.query.all())
 
 @frontend.route("login", methods=["GET", "POST"])
 def login():
-  form = LoginForm()
-  print form.errors
-  if form.validate_on_submit():
+  form = request.form
+  print "\n\n\n\n"
+  print request.method
+  if request.method == 'POST':
+    print "Validation\n\n\n\n"
+
+    donor = Donor.query.filter_by(email_address=form['email'])
+    print form['email']
+    print form['password']
+
+
     # login and validate the user...
-    login_user(form.user)
+
+
+    # login_user("Donor object")
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
     return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
@@ -123,8 +93,8 @@ def view_donations():
                     donor_accessible_donation_ids.append(i)
             donation_ids = donor_accessible_donation_ids
             donations=Donation.query.filter(Donation.id.in_(donation_ids)).all()
-            return generate_zipped_receipts(donations) 
-            
+            return generate_zipped_receipts(donations)
+
 def generate_zipped_receipts(donations):
     pdfFiles = []
     for donation in donations:
@@ -137,11 +107,11 @@ def generate_zipped_receipts(donations):
     headers = {"Content-Disposition": "attachment; filename=receipt.zip"}
     return make_response((response_body,'200', headers))
 
-  
+
 """take a list of file names and return a fd for the zipped file"""
 def zipFiles(files):
     s = str(random.randint(0,10000000))
-    s = "archivename"+s+".zip"    
+    s = "archivename"+s+".zip"
     z = ZipFile(s, "w", ZIP_DEFLATED)
     for f in files:
         z.write(f, f.split('/')[-1])
@@ -149,23 +119,23 @@ def zipFiles(files):
     return s
 
 """
-gets data to be populated and creates the pdf 
+gets data to be populated and creates the pdf
 """
 def makePdf(data):
     if not data:
         raise Exception("null data in makeHtml");
     templateString = open("receipt_template.html").read()
-    template = Template(templateString)    
+    template = Template(templateString)
     html = template.render(data)
     return convertHtmlToPdf(html)
 
 def convertHtmlToPdf(sourceHtml):
     resultFile = tempfile.NamedTemporaryFile(prefix='receipt_', suffix='.pdf', dir='/tmp', delete=False)
-    # convert HTML to PDF 
+    # convert HTML to PDF
     pisaStatus = pisa.CreatePDF(
             sourceHtml,                # the HTML to convert
             dest=resultFile)           # file handle to recieve result
     return resultFile.name
 
 
-      
+
