@@ -6,7 +6,7 @@ from wtforms import TextField, PasswordField, validators
 import sys
 sys.path.append("..")
 from modules.login_manager import loginManager
-from models import db, Donor, Donation
+from models import db, Donor, Donation, User
 
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
