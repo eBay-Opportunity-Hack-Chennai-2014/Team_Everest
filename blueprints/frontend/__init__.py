@@ -43,7 +43,10 @@ def load_user(userid):
 @frontend.route('donate', methods=['GET'])
 @login_required
 def donation_form_page():
-    return render_template('DonationForm.html', donors=Donor.query.all())
+    if current_user.is_admin:
+        return render_template('DonationForm.html', donors=Donor.query.all())
+    else:
+        return current_app.login_manager.unauthorized()
 
 @frontend.route("login", methods=["GET", "POST"])
 def login():
@@ -74,7 +77,10 @@ def logout():
 @frontend.route('createDonor', methods=['GET'])
 @login_required
 def donor_creation_page():
-    return render_template('DonorCreation.html')
+    if current_user.is_admin:
+        return render_template('DonorCreation.html')
+    else:
+        return current_app.login_manager.unauthorized()
 
 def fun(s):
     try:
@@ -84,6 +90,7 @@ def fun(s):
             return int(s)
     except Exception:
         return None
+
 @frontend.route('donations', methods=['GET','POST'])
 @login_required
 def view_donations():

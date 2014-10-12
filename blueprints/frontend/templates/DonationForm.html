@@ -82,7 +82,7 @@ body{
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 
- <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     	<!-- Brand and toggle get grouped for better mobile display -->
     	<div class="container">
     		<div class="navbar-header">
@@ -92,16 +92,16 @@ body{
     				<span class="icon-bar"></span>
     				<span class="icon-bar"></span>
     			</button>
-    			<a class="navbar-brand">Ereceipt Tool</a>
+    			<a class="navbar-brand">E-receipt Tool</a>
     		</div>
     		<!-- Collect the nav links, forms, and other content for toggling -->
     		<div class="collapse navbar-collapse" id="navbarCollapse">
     			<ul class="nav navbar-nav">
-    				<li><a href="donations">View Donation</a></li>
+    				<li ><a href="donations">View Donation</a></li>
     				<li class="active"><a href="donate">Submit Donation Form</a></li>
     				<li><a href="createDonor">Donor Creation</a></li>
     				<li><a href="backend/excel">Bulk Upload</a></li>
-    				<li><a href="Login.html">Logout</a></li>
+    				<li><a href="logout">Logout</a></li>
     			</ul>
     		</div>
     	</div>
@@ -207,7 +207,7 @@ body{
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary col-sm-offset-4">Submit</button>
+      <button type="submit" class="btn btn-primary col-sm-offset-4" onClick="onSubmit()">Submit</button>
     </div>
   </div>
 
