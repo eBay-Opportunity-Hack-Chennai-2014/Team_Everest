@@ -71,7 +71,7 @@ def login():
     # print "hi"+type(url_for(".donor_form_page"))
     # print request.args.get("next")
     return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
-  return render_template("login.html", form=form)
+  return render_template("Login.html", form=form)
 
 @frontend.route('createDonor', methods=['GET'])
 @login_required
