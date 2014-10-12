@@ -3,31 +3,100 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <style type="text/css">
+	    body{
+	    	padding-top: 70px;
+	    }
+    </style>
   </head>
 
   <body>
+    <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    	<!-- Brand and toggle get grouped for better mobile display -->
+    	<div class="container">
+    		<div class="navbar-header">
+    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+    				<span class="sr-only">Toggle navigation</span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="navbar-brand">Ereceipt Tool</a>
+    		</div>
+    		<!-- Collect the nav links, forms, and other content for toggling -->
+    		<div class="collapse navbar-collapse" id="navbarCollapse">
+    			<ul class="nav navbar-nav">
+    				<li><a href="Templatecsv.html">View Donation</a></li>
+    				<li><a href="DonationForm.html">Submit Donation Form</a></li>
+    				<li><a href="DonorCreation.html">Donor Creation</a></li>
+    				<li class="active"><a href="BulkUpload.html">Bulk Upload</a></li>
+    			</ul>
+    		</div>
+    	</div>
+    </nav>
+
+
     <div class="container">
-      </br></br></br></br></br></br>
-      <div class="col-md-4 col-md-offset-4 vert-offset-top-2">
-      <h2>File Upload</h2>
-      <form method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-      <div class="col-md-8 col-md-offset-0">
+    <div class="jumbotron">
+
+              <div class="text-center">
+
+	<div class="row-fluid">
+	<h2 class="rw-sentence">
+	BULK UPLOAD
+
+	</h2>
+</div>
+</div>
+
+
+    <style type="text/css">
+p {
+    padding: 25px 50px;
+}
+</style>
+      <form class="form-horizontal" role="form" enctype="multipart/form-data" method="post">
+
+
+      <div class="form-group">
+	  		  <label for="pwd" class="col-xs-5 control-label"><h4>View the Upload Template File:</h4></label>
+	  	    <div class="col-md-4">
+	  		  <a href="details.xlsx" target="_blank"><h4>Template.csv</h4></a >
+         </div>
+        </div>
+
         <div class="form-group">
+
+      <label for="upload" class="col-xs-5 control-label">File Upload:</label>
+
+      <form method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
           <input type="file" name="file" id="txtFileUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         </div>
-      </div>
-   <br>     <div class="checkbox">
+
+
+   <br>
+
+        <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-10">
+
+   <div class="checkbox col-xs-5">
 		  <label>
 		     <input type="checkbox" onclick="if(this.checked) {this.form.action='/backend/excel?check=1'} else {this.form.action='/backend/excel'}"> Download in .zip format? </label>
         </div>
+</div>
+	</div>
 
+
+	      <div class="form-group">
+	         <div class="col-md-offset-2 col-md-10">
+            <p>
        <button type="submit" class="btn btn-primary">Submit</button>
+                   </p>
+	            </div>
+      </div>
       </form>
-      <div class="form-group">
-	  		  <label for="pwd">Template File:</label>
-	  		  <a href="test.html" target="_blank">Template.csv</a >
-        </div>
-    </div>
+</form>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
