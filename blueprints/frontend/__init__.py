@@ -61,6 +61,7 @@ def login():
     # login_user("Donor object")
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
+    return redirect("/donations")
     return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
   return render_template("Login.html", form=form)
 

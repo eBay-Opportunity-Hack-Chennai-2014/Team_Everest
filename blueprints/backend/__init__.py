@@ -255,11 +255,14 @@ def readExcel(inputFile):
         if not email:
             raise Exception("no email");
         donor = get_donor_by_email(email)
+        is_new_donor = False
         if not donor:
+            password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
             name = row[order_of_fields["Name"]].value
             address = row[order_of_fields["Address"]].value
             contact_number = row[order_of_fields["ContactNo"]].value
-            donor = Donor(email, name, contact_number, address)
+            donor = Donor(email_address=email, password_sha256=hashlib.sha256(password).hexdigest(), is_admin=False, name=name, contact_number=contact_number, address=address)
+            is_new_donor = True
         date = row[order_of_fields["DonationDate"]].value
         year, month, day, hour, minute, second = xlrd.xldate_as_tuple(date, workbook.datemode)
 	date = datetime.datetime(year, month, day, hour, minute, second)
@@ -270,6 +273,8 @@ def readExcel(inputFile):
         donor.donations.append(donation)
         db.session.add(donor)
         db.session.commit()  
+        if is_new_donor:
+            sendEmail(donor.email_address, donor_created_text.format(password), None)
         donation_ids.append(donation.id)     
     return donation_ids
 def get_donor_by_email(email):
