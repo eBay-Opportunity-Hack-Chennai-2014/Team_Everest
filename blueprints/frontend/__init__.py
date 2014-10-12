@@ -23,3 +23,6 @@ def donor_creation_page():
 def donation_form_page():
     return render_template('DonationForm.html', donors = Donor.query.all())
 
+@frontend.route('donations', methods=['GET'])
+def view_donations():
+    return render_template('view_donations.htm')
