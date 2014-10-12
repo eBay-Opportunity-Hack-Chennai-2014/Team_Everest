@@ -36,7 +36,9 @@ frontend = Blueprint('frontend', __name__,
 @loginManager.user_loader
 def load_user(userid):
   print 'Load user being done '
-  return User.query.filter_by(name=userid).first()
+  donor = Donor.query.filter_by(email_address=userid).first()
+  print donor
+  return donor
 
 @frontend.route('donate', methods=['GET'])
 def donation_form_page():
@@ -45,24 +47,17 @@ def donation_form_page():
 @frontend.route("login", methods=["GET", "POST"])
 def login():
   form = request.form
-  print "\n\n\n\n"
   print request.method
   if request.method == 'POST':
     print "Validation\n\n\n\n"
 
-    donor = Donor.query.filter_by(email_address=form['email'])
-    print form['email']
-    print form['password']
-
-
+    donor = Donor.query.filter_by(email_address = form['email']).first()
     # login and validate the user...
-
-
-    # login_user("Donor object")
+    login_user(donor)
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
-    return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
-  return render_template("Login.html", form=form)
+    return redirect(request.args.get("next") or url_for("frontend.view_donations"))
+  return render_template("Login.html")
 
 @frontend.route('createDonor', methods=['GET'])
 def donor_creation_page():
