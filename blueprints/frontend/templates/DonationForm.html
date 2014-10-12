@@ -78,6 +78,7 @@ function onSubmitAndSend()
     </style>
   </head>
 
+
   <body>
     <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     	<!-- Brand and toggle get grouped for better mobile display -->
@@ -94,9 +95,10 @@ function onSubmitAndSend()
     		<!-- Collect the nav links, forms, and other content for toggling -->
     		<div class="collapse navbar-collapse" id="navbarCollapse">
     			<ul class="nav navbar-nav">
-    				<li><a href="http://www.tutorialrepublic.com" target="_blank">View Donation</a></li>
-    				<li class="active"><a href="http://www.tutorialrepublic.com/about-us.php" target="_blank">Submit Donation Form</a></li>
-    				<li><a href="http://www.tutorialrepublic.com/contact-us.php" target="_blank">Bulk Upload</a></li>
+    				<li><a href="Templatecsv.html">View Donation</a></li>
+    				<li  class="active"><a href="donate">Submit Donation Form</a></li>
+    				<li><a href="createDonor">Donor Creation</a></li>
+    				<li><a href="BulkUpload.html">Bulk Upload</a></li>
     			</ul>
     		</div>
     	</div>
@@ -143,6 +145,7 @@ p {
          <label for="donationMode" class="control-label col-xs-5">Donation Mode </label>
          <div class="col-md-2 dropdown">
          <select class="form-control col-md-2" name="donationMode" onChange="dropdownChange(this.value)">
+            <option value=""></option>
             <option value="cash">Cash</option>
             <option value="cheque">Cheque</option>
             <option value="internet">Internet</option>
@@ -507,9 +510,9 @@ p {
       <div class="form-group">
          <div class="col-md-offset-2 col-md-10">
             <p>
-            <button type="submit" class="btn btn-primary" name="formSubmit" onClick="onSubmit()">Submit</button>
-            <button type="submit" class="btn btn-primary" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
-            <button type="submit" class="btn btn-primary" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
+            <button type="submit" class="btn btn-primary btn-s" name="formSubmit" onClick="onSubmit()">Submit</button>
+            <button type="submit" class="btn btn-primary btn-s" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
+            <button type="submit" class="btn btn-primary btn-s" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button>
             </p>
          </div>
       </div>
