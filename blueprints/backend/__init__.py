@@ -53,7 +53,7 @@ def create_donor():
     donor = Donor.query.filter_by(email_address=request.form['email']).first()
     if donor is not None:
         abort(400)
-    password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
     donor = Donor(email_address=request.form['email'], password_sha256=hashlib.sha256(password).hexdigest(), is_admin=False, name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
     db.session.add(donor)
     db.session.commit()
@@ -63,7 +63,7 @@ def create_donor():
 def create_donation_in_db(form):
     donor = Donor.query.filter_by(email_address=form['donor']).first()
     if donor is None:
-        password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+        password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
         donor = Donor(email_address=form['donor'], password_sha256=hashlib.sha256(password).hexdigest(), is_admin=False)
         db.session.add(donor)
         db.session.commit()
@@ -257,7 +257,7 @@ def readExcel(inputFile):
         donor = get_donor_by_email(email)
         is_new_donor = False
         if not donor:
-            password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+            password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
             name = row[order_of_fields["Name"]].value
             address = row[order_of_fields["Address"]].value
             contact_number = row[order_of_fields["ContactNo"]].value
