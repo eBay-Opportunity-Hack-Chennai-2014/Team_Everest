@@ -34,7 +34,7 @@ def create_donor():
     db.session.commit()
     return redirect(request.referrer)
 
-def create_donation(form):
+def create_donation_in_db(form):
     donor = Donor.query.filter_by(email_address=form['donor']).first()
     if donor is None:
         donor = Donor(email_address=form['donor'])
@@ -53,7 +53,7 @@ def create_donation(form):
 
 @backend.route('create_donation/', methods=['POST'])
 def create_donation():
-    donation = create_donation(request.form)
+    donation = create_donation_in_db(request.form)
     if not request.form['download_pdf'] and not request.form['email_pdf']:
         return redirect(request.referrer)
     strIO = create_receipt_pdf(donation.id)
