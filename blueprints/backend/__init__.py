@@ -106,7 +106,7 @@ def create_receipt_pdf(donation_id):
     if donation is None:
         return None
     with open("receipt_template.html") as template_file:
-        html = Template(template_file.read()).render({'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "Chennai", 'DonationMode': donation.mode, 'DonarAddress' : donation.donor.address})
+        html = Template(template_file.read()).render({'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "Chennai", 'DonationMode': donation.mode, 'DonarAddress' : donation.donor.address, 'DonorName':donor.first().name, 'DonorAddress' : donor.first().address})
         strIO = StringIO.StringIO()
         pisa.CreatePDF(html, dest=strIO)
         return strIO
