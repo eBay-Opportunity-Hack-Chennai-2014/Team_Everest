@@ -33,21 +33,69 @@ function reset()
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <style type="text/css">
+	    body{
+	    	padding-top: 70px;
+	    }
+    </style>
   </head>
 
-  <body>
+<body>
+    <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    	<!-- Brand and toggle get grouped for better mobile display -->
+    	<div class="container">
+    		<div class="navbar-header">
+    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+    				<span class="sr-only">Toggle navigation</span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="navbar-brand">Ereceipt Tool</a>
+    		</div>
+    		<!-- Collect the nav links, forms, and other content for toggling -->
+    		<div class="collapse navbar-collapse" id="navbarCollapse">
+    			<ul class="nav navbar-nav">
+    				<li><a href="Templatecsv.html">View Donation</a></li>
+    				<li><a href="DonationForm.html">Submit Donation Form</a></li>
+    				<li class="active"><a href="DonorCreation.html">Donor Creation</a></li>
+    				<li><a href="BulkUpload.html">Bulk Upload</a></li>
+    			</ul>
+    		</div>
+    	</div>
+    </nav>
+
+
     <div class="container">
-      <h2>New Donor</h2>
+    <div class="jumbotron">
+
+              <div class="text-center">
+
+	<div class="row-fluid">
+	<h2 class="rw-sentence">
+	DONOR CREATION FORM
+
+	</h2>
+</div>
+</div>
+
+
+    <style type="text/css">
+p {
+    padding: 25px 50px;
+}
+</style>
       <form class="form-horizontal" role="form">
   <div class="form-group">
-    <label for="inputNameLabel" class="col-sm-2 control-label">Name</label>
+    <label for="inputNameLabel" class="control-label col-xs-5">Name</label>
     <div class="col-md-4">
       <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
     </div>
   </div>
 
 <div class="form-group">
-    <label for="inputPhoneLabel" class="col-sm-2 control-label">Contact No:</label>
+    <label for="inputPhoneLabel" class="control-label col-xs-5">Contact No:</label>
     <div class="col-md-4">
       <input type="tel" class="form-control" id="inputPhone" placeholder="Phone" name="contact_number">
 
@@ -55,28 +103,28 @@ function reset()
   </div>
 
 <div class="form-group">
-    <label for="inputEmailLabel" class="col-sm-2 control-label">Email</label>
+    <label for="inputEmailLabel" class="control-label col-xs-5">Email</label>
     <div class="col-md-4">
       <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email">
     </div>
   </div>
 
 <div class="form-group">
-    <label for="inputAddressLabel" class="col-sm-2 control-label">Address</label>
+    <label for="inputAddressLabel" class="control-label col-xs-5">Address</label>
     <div class="col-md-4">
       <textarea class="form-control" id="inputAddress" rows="4" placeholder="Address" name="address"></textarea>
    </div>
    </div>
 
    <div class="form-group">
-    <label for="inputTownLabel" class="col-sm-2 control-label">Town/City</label>
+    <label for="inputTownLabel" class="control-label col-xs-5">Town/City</label>
     <div class="col-md-2">
       <input type="text" class="form-control" id="inputTown" placeholder="Town or City" name="city">
     </div>
    </div>
 
    <div class="form-group">
-    <label for="inputCountryLabel" class="col-sm-2 control-label">Country</label>
+    <label for="inputCountryLabel" class="control-label col-xs-5">Country</label>
     <div class="col-md-2">
       <select class="form-control" id="inputCountry" placeholder="Country" name="country">
 	  	<option value="Afghanistan" title="Afghanistan">Afghanistan</option>
@@ -333,10 +381,10 @@ function reset()
    </div>
 
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" onClick="onSave()">Save</button>
-      <button type="reset" class="btn btn-default" onClick="resetButton()">Reset</button>
-      <button type="cancel" class="btn btn-default" onClick="DonationForm.html">Cancel</button>
+    <div class="col-md-offset-4 col-md-10">
+      <button type="submit" class="btn btn-primary btn-s" onClick="onSave()">Save</button>
+      <button type="reset" class="btn btn-primary btn-s" onClick="resetButton()">Reset</button>
+      <button type="cancel" class="btn btn-primary btn-s" onClick="DonationForm.html">Cancel</button>
     </div>
   </div>
 </form>
