@@ -12,6 +12,8 @@ app.config.from_envvar('EVEREST_SETTINGS', silent=True)
 app.register_blueprint(frontend, url_prefix='/')
 app.register_blueprint(backend, url_prefix='/backend/')
 app.secret_key = 'why would I tell you my secret key?'
+app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['ALLOWED_EXTENSIONS'] = set([ 'xls', 'xlsx', 'csv'])
 
 loginManager.init_app(app)
 

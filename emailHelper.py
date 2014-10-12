@@ -6,7 +6,6 @@ from email import Encoders
 #Email sending module. Takes 2 arguments, receiver mail id and the fileObject of attachment. Attachment is assumed to be on disk.
 
 def sendEmail(emailTo,attachmentFile):
-  emailTo= "nks.22.1992@gmail.com"
   EMAIL_FROM =  "nkskalyann@gmail.com"
   EMAIL_SERVER = "smtp.gmail.com"
   SUBJECT = "Auto generated Receipt"
@@ -16,10 +15,15 @@ def sendEmail(emailTo,attachmentFile):
   msg['From'] = EMAIL_FROM
   msg['To'] = emailTo
   part = MIMEBase('application', "octet-stream")
-  part.set_payload(attachmentFile).read())
+  part.set_payload(attachmentFile.read())
   Encoders.encode_base64(part)
 
-  part.add_header('Content-Disposition', 'attachment; filename='+attachmentFile.name)
+  if hasattr(attachmentFile,"name"):
+    fileName = attachmentFile.name
+  else:
+    fileName = "Receipt.pdf"
+
+  part.add_header('Content-Disposition', 'attachment; filename='+fileName)
 
   msg.attach(part)
 
@@ -27,5 +31,5 @@ def sendEmail(emailTo,attachmentFile):
   server.ehlo()
   server.starttls()
   server.ehlo()
-  server.login(EMAIL_FROM,"123simple")
+  server.login(EMAIL_FROM, "123simple")
   server.sendmail(EMAIL_FROM, [emailTo], msg.as_string())
