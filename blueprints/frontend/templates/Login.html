@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -14,6 +15,7 @@ background-color: #FFFDFF;
 
 </style>
 </head>
+
 
   <body>
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -41,7 +43,7 @@ font-family:Georgia">
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter Password">
   </div>
   
   <div class="checkbox col-md-offset-4">
@@ -59,20 +61,27 @@ font-family:Georgia">
      <!-- </br></br></br></br></br></br>
       <div class="col-md-4 col-md-offset-4 vert-offset-top-2">
       <h2>Login</h2>
-      <form class="form-horizontal" role="form" action="{{ url_for('.login') }}" method="POST">
+      <form class="form-horizontal" role="form" method="post" action="{{ url_for('.login') }}">
+        <div class="form-group">
 
-<div class="form-group">
-          
           <label for="email">Email:</label>
-        {{ form.name }}
+          <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
         </div>
-{{ form.csrf_token }}
-<div class="form-group">
-          <label for="pwd">Password:</label>
-        {{ form.password }}
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="checkbox">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+        <button type="submit" class="btn btn-primary" onClick="submitForm()">Submit</button>
       </form>
+<<<<<<< HEAD
     </body>-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
   </body>
 </html>
