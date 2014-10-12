@@ -5,8 +5,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, validators
 import sys
-sys.path.append("..")
-from modules.login_manager import loginManager
+from login_manager import lm
 from models import db, Donor, Donation
 import tempfile
 from num2words import num2words
@@ -33,7 +32,7 @@ from emailHelper import sendEmail
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
-@loginManager.user_loader
+@lm.user_loader
 def load_user(userid):
   print 'Load user being done '
   donor = Donor.query.filter_by(email_address=userid).first()
@@ -49,10 +48,10 @@ def login():
   form = request.form
   print request.method
   if request.method == 'POST':
-    print "Validation\n\n\n\n"
-
     donor = Donor.query.filter_by(email_address = form['email']).first()
     # login and validate the user...
+    if donor is None:
+      return redirect(url_for('.login'))
     login_user(donor)
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
