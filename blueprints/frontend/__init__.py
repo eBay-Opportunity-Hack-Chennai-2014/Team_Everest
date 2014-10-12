@@ -6,7 +6,7 @@ from wtforms import TextField, PasswordField, validators
 import sys
 sys.path.append("..")
 from modules.login_manager import loginManager
-from models import db, Donor, Donation, User
+from models import db, Donor, Donation
 
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
@@ -16,44 +16,15 @@ def load_user(userid):
   print 'Load user being done '
   return User.query.filter_by(name=userid).first()
 
-class LoginForm(Form):
-  name = TextField('Username', [validators.Required()])
-  password = PasswordField('Password', [validators.Required()])
-  def __init__(self, *args, **kwargs):
-      Form.__init__(self, *args, **kwargs)
-      self.user = None
-
-  def validate(self):
-    userObj =  User.query.all()[0]
-    rv = Form.validate(self)
-    if not rv:
-      return False
-    user = User.query.filter_by(
-        name=self.name.data)
-
-    if user is None:
-      self.name.errors.append('Unknown username')
-      return False
-
-    user = User.query.filter_by(
-        password=self.password.data)
-
-    if user is None:
-      self.password.errors.append('Invalid password')
-      return False
-
-    self.user = user.first()
-    return True
-
 @frontend.route('', methods=['GET'])
 def test_page():
   return render_template('test.html')
 
-@frontend.route('registerNew', methods = ["POST"])
-def create_user():
-  user = User("user@everest.com","pass123")
-  db.session.add(user)
-  db.session.commit()
+# @frontend.route('registerNew', methods = ["POST"])
+# def create_user():
+#   user = User("user@everest.com","pass123")
+#   db.session.add(user)
+#   db.session.commit()
 
 @frontend.route('donate', methods=['GET'])
 def donation_form_page():
@@ -61,11 +32,21 @@ def donation_form_page():
 
 @frontend.route("login", methods=["GET", "POST"])
 def login():
-  form = LoginForm()
-  print form.errors
-  if form.validate_on_submit():
+  form = request.form
+  print "\n\n\n\n"
+  print request.method
+  if request.method == 'POST':
+    print "Validation\n\n\n\n"
+
+    donor = Donor.query.filter_by(email = form['email'])
+    print form['email']
+    print form['password']
+
+
     # login and validate the user...
-    login_user(form.user)
+
+
+    # login_user("Donor object")
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
     return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
