@@ -27,11 +27,12 @@ $(document).ready(function() {
       <div class="col-xs-12">
 
 
-
+	<form method="post">
 
         <table id="example" class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
           <thead>
             <tr>
+              <th style="width: 10px"></th>
               <th style="width: 20px;">#</th>
               <th style="width: 231px;">Email</th>
               <th style="width: 190px;">Amount</th>
@@ -44,6 +45,7 @@ $(document).ready(function() {
           <tbody>
             {% for donation in donations %}
               <tr>
+                <td><input type="checkbox" name={{ donation.id }}/></td>
                 <td>{{ donation.id }}</td>
                 <td>{{ donation.donor.email_address }}</td>
                 <td>{{ donation.amount }}</td>
@@ -57,6 +59,8 @@ $(document).ready(function() {
 
           </tbody>
         </table>
+	<input type="submit">
+	</form>
       </div>
     </div>
 
