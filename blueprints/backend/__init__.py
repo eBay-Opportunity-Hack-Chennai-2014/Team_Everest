@@ -99,24 +99,6 @@ def create_donation():
     else:
         return redirect(request.referrer)
 
-
-@backend.route('create_donation_and_return_pdf/', methods=['POST'])
-def create_donation_and_return_pdf():
-    donation = create_donation(request.form)
-    if strIO is not None:
-        strIO.seek(0)
-    else:
-        abort(400)
-
-@backend.route('create_donation_and_email_pdf/', methods=['POST'])
-def create_donation_and_email_pdf():
-    donation = create_donation(request.form)
-    strIO = create_receipt_pdf(donation.id)
-    if strIO is not None:
-        return redirect(request.referrer)
-    else:
-        abort(400)
-
 def create_receipt_pdf(donation_id):
     donation = Donation.query.get(donation_id)
     if donation is None:
