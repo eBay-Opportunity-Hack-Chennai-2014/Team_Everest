@@ -7,6 +7,7 @@ function dropdownChange(value){
     document.getElementById("cheque").style.display = "none";
     document.getElementById("chequeDate").value = "";
     document.getElementById("chequeNumber").value = "";
+	document.getElementById("chequeDate").style.display = "none";
     document.getElementById("internet").style.display = "none";
     document.getElementById("transactionId").value = "";
   }else if (value == "cheque") {
@@ -21,7 +22,6 @@ function dropdownChange(value){
     document.getElementById("cash").style.display = "none";
   }
 }
-
 
 
 function onSave()
@@ -47,7 +47,8 @@ function onSubmitAndDownload()
   document.form1.action = "backend/create_donation_and_return_pdf/"
     // document.Form1.target = "_blank";    // Open in a new window
     document.form1.submit();             // Submit the page
-  return true}
+  return true;
+  }
 
 function onSubmit()
 {
@@ -113,8 +114,7 @@ body{
       <div class="row-fluid">
         <h2 class="rw-sentence">
           DONATION FORM
-
-        </h2>
+        </h2> <br>
       </div>
     </div>
 
@@ -127,6 +127,18 @@ p {
 
     <form class="form-horizontal" id="form1" name="form1" method="post" role="form">
 
+	    <div class="form-group">
+			<label for="donor" class="control-label col-xs-5">Select Donor </label>
+			<div class="col-md-2 dropdown">
+				<select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
+					{% for donor in donors %}
+				<option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<a type="button" class="btn btn-success btn-s" href="createDonor"> Add </a>
+		</div>
+			
       <div class="form-group">
         <label for="donationDate" class="control-label col-xs-5">Donation Date </label>
         <div class="col-md-2">
@@ -153,18 +165,6 @@ p {
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="donor" class="control-label col-xs-5">Select Donor </label>
-        <div class="col-md-2 dropdown">
-          <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-            {% for donor in donors %}
-            <option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <a type="button" class="btn btn-success btn-s" href="createDonor">
-          Add
-        </a>
 
       <div id="cheque" style="display:none">
         <div class="form-group">
@@ -180,7 +180,6 @@ p {
             <input type="number" class="form-control" id="chequeNumber" name="chequeNumber">
           </div>
         </div>
-
       </div>
 
       <div id="internet" style="display:none">
@@ -193,9 +192,15 @@ p {
       </div>
 
       <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+			<input type="checkbox" name="download" value="Download">Download receipt<br>
+			<input type="checkbox" name="email" value"Email">Send Email<br>
+
         <div class="control-label col-xs-5">
 	<input type="checkbox" name="download_pdf" value="download_pdf">Download receipt<br>
         <input type="checkbox" name="email_pdf" value"email_pdf">Send Email<br>
+
           <p>
           <button type="submit" class="btn btn-primary btn-s" name="formSubmit" onClick="onSubmit()">Submit</button>
           <!--button type="submit" class="btn btn-primary btn-s" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
@@ -203,7 +208,9 @@ p {
           </p>
         </div>
       </div>
+	  
     </form>
+  </div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
