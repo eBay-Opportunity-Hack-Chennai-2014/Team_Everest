@@ -81,11 +81,12 @@ def create_donation_in_db(form):
 
 @backend.route('create_donation/', methods=['POST'])
 def create_donation():
+    print(request.form)
     donation = create_donation_in_db(request.form)
-    if not request.form['download_pdf'] and not request.form['email_pdf']:
+    if not request.form.get('download_pdf', False) and not request.form.get('email_pdf', False):
         return redirect(request.referrer)
     strIO = create_receipt_pdf(donation.id)
-    if request.form['email_pdf']:
+    if request.form.get('email_pdf', False):
         if strIO is not None:
             strIO.seek(0)
             sendEmail(donation.donor.email_address, donation_made_text.format(donation.date, donation.amount), strIO)
