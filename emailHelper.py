@@ -9,27 +9,26 @@ from email import Encoders
 def sendEmail(emailTo, bodyText, attachmentFile):
   EMAIL_FROM =  "teameverest.ohack@gmail.com"
   EMAIL_SERVER = "smtp.gmail.com"
-  SUBJECT = "Auto generated Receipt"
+  SUBJECT = "Auto generated email"
 
   emailBody = MIMEText(bodyText,"plain")
   msg = MIMEMultipart()
   msg['Subject'] = SUBJECT
   msg['From'] = EMAIL_FROM
   msg['To'] = emailTo
-  part = MIMEBase('application', "octet-stream")
-  part.set_payload(attachmentFile.read())
-  Encoders.encode_base64(part)
+  if attachmentFile:
+    part = MIMEBase('application', "octet-stream")
+    part.set_payload(attachmentFile.read())
+    Encoders.encode_base64(part)
+    if hasattr(attachmentFile,"name"):
+        fileName = attachmentFile.name
+    else:
+        fileName = "Receipt.pdf"
 
-  if hasattr(attachmentFile,"name"):
-    fileName = attachmentFile.name
-  else:
-    fileName = "Receipt.pdf"
+    part.add_header('Content-Disposition', 'attachment; filename='+fileName)
+    msg.attach(part)
 
-  part.add_header('Content-Disposition', 'attachment; filename='+fileName)
-
-  msg.attach(part)
   msg.attach(emailBody)
-
   server = smtplib.SMTP(EMAIL_SERVER,587)
   server.ehlo()
   server.starttls()

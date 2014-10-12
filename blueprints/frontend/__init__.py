@@ -38,16 +38,6 @@ def load_user(userid):
   print 'Load user being done '
   return User.query.filter_by(name=userid).first()
 
-@frontend.route('', methods=['GET'])
-def test_page():
-  return render_template('test.html')
-
-# @frontend.route('registerNew', methods = ["POST"])
-# def create_user():
-#   user = User("user@everest.com","pass123")
-#   db.session.add(user)
-#   db.session.commit()
-
 @frontend.route('donate', methods=['GET'])
 def donation_form_page():
     return render_template('DonationForm.html', donors=Donor.query.all())

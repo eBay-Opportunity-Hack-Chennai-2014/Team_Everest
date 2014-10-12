@@ -7,6 +7,7 @@ from jinja2 import Template
 import os
 import datetime
 import random
+import string
 import StringIO
 import hashlib
 import xlrd
