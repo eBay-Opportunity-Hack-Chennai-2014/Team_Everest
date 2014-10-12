@@ -53,7 +53,7 @@ def create_donor():
     if donor is not None:
         abort(400)
     password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-    donor = Donor(email_address=request.form['email'], password_sha256=hashlib.sha256(password).hexdigits(), is_admin=False, name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
+    donor = Donor(email_address=request.form['email'], password_sha256=hashlib.sha256(password).hexdigest(), is_admin=False, name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
     db.session.add(donor)
     db.session.commit()
     sendEmail(donor.email_address, donor_created_text.format(password), None)
@@ -63,7 +63,7 @@ def create_donation_in_db(form):
     donor = Donor.query.filter_by(email_address=form['donor']).first()
     if donor is None:
         password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
-        donor = Donor(email_address=form['donor'], password_sha256=hashlib.sha256(password).hexdigits(), is_admin=False)
+        donor = Donor(email_address=form['donor'], password_sha256=hashlib.sha256(password).hexdigest(), is_admin=False)
         db.session.add(donor)
         db.session.commit()
         sendEmail(donor.email_address, donor_created_text.format(password), None)
