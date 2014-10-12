@@ -8,6 +8,7 @@ import os
 import datetime
 import random
 import StringIO
+import hashlib
 import xlrd
 
 from contextlib import closing
@@ -23,23 +24,49 @@ from emailHelper import sendEmail
 
 backend = Blueprint('backend', __name__)
 
+donation_made_text = '''Dear Donor,
+
+  Thank you for making a difference by donating Rs {} on {} for Team Everest.  Please find your E-receipt attached with this email for your donation.
+
+  Keep making a difference.
+
+  Thanks & Regards,
+  Team Everest
+  www.teameverestindia.org
+'''
+
+donor_created_text = '''Dear Donor,
+
+  An account has been created in your name, with the password {}.
+
+  Keep making a difference.
+
+  Thanks & Regards,
+  Team Everest
+  www.teameverestindia.org
+'''
+
 @backend.route('create_donor/', methods=['POST'])
 def create_donor():
     print(request.form)
     donor = Donor.query.filter_by(email_address=request.form['email']).first()
     if donor is not None:
         abort(400)
-    donor = Donor(email_address=request.form['email'], name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
+    password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    donor = Donor(email_address=request.form['email'], password_sha256=hashlib.sha256(password).hexdigits(), is_admin=False, name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
     db.session.add(donor)
     db.session.commit()
+    sendEmail(donor.email_address, donor_created_text.format(password), None)
     return redirect(request.referrer)
 
 def create_donation_in_db(form):
     donor = Donor.query.filter_by(email_address=form['donor']).first()
     if donor is None:
-        donor = Donor(email_address=form['donor'])
+        password = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+        donor = Donor(email_address=form['donor'], password_sha256=hashlib.sha256(password).hexdigits(), is_admin=False)
         db.session.add(donor)
         db.session.commit()
+        sendEmail(donor.email_address, donor_created_text.format(password), None)
     donation = Donation(date=form['donationDate'],
                         amount=form['donationAmount'],
                         mode=form['donationMode'],
@@ -60,7 +87,7 @@ def create_donation():
     if request.form['email_pdf']:
         if strIO is not None:
             strIO.seek(0)
-            sendEmail(donation.donor.email_address, strIO)
+            sendEmail(donation.donor.email_address, donation_made_text.format(donation.date, donation.amount), strIO)
         else:
             abort(400)
     if request.form['download_pdf']:
@@ -71,24 +98,6 @@ def create_donation():
             abort(400)
     else:
         return redirect(request.referrer)
-
-
-@backend.route('create_donation_and_return_pdf/', methods=['POST'])
-def create_donation_and_return_pdf():
-    donation = create_donation(request.form)
-    if strIO is not None:
-        strIO.seek(0)
-    else:
-        abort(400)
-
-@backend.route('create_donation_and_email_pdf/', methods=['POST'])
-def create_donation_and_email_pdf():
-    donation = create_donation(request.form)
-    strIO = create_receipt_pdf(donation.id)
-    if strIO is not None:
-        return redirect(request.referrer)
-    else:
-        abort(400)
 
 def create_receipt_pdf(donation_id):
     donation = Donation.query.get(donation_id)

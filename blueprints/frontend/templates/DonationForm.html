@@ -1,9 +1,9 @@
 <!DOCTYPE html>
+
 <script type="text/javascript">
 function dropdownChange(value){
   if (value == "cash")
   {
-    document.getElementById("cash").style.display = "block";
     document.getElementById("cheque").style.display = "none";
     document.getElementById("chequeDate").value = "";
     document.getElementById("chequeNumber").value = "";
@@ -11,17 +11,15 @@ function dropdownChange(value){
     document.getElementById("transactionId").value = "";
   }else if (value == "cheque") {
     document.getElementById("cheque").style.display = "block";
+	document.getElementById("transactionId").value="";
     document.getElementById("internet").style.display = "none";
-    document.getElementById("cash").style.display = "none";
   }else if (value == "internet") {
     document.getElementById("internet").style.display = "block";
     document.getElementById("cheque").style.display = "none";
     document.getElementById("chequeDate").value = "";
     document.getElementById("chequeNumber").value = "";
-    document.getElementById("cash").style.display = "none";
   }
 }
-
 
 
 function onSave()
@@ -47,7 +45,8 @@ function onSubmitAndDownload()
   document.form1.action = "backend/create_donation_and_return_pdf/"
     // document.Form1.target = "_blank";    // Open in a new window
     document.form1.submit();             // Submit the page
-  return true}
+  return true;
+  }
 
 function onSubmit()
 {
@@ -80,29 +79,33 @@ body{
 
 
 <body>
-<nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand">Ereceipt Tool</a>
-    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="nav navbar-nav">
-        <li><a href="Templatecsv.html">View Donation</a></li>
-        <li  class="active"><a href="donate">Submit Donation Form</a></li>
-        <li><a href="createDonor">Donor Creation</a></li>
-        <li><a href="BulkUpload.html">Bulk Upload</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+
+ <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    	<!-- Brand and toggle get grouped for better mobile display -->
+    	<div class="container">
+    		<div class="navbar-header">
+    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+    				<span class="sr-only">Toggle navigation</span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="navbar-brand">Ereceipt Tool</a>
+    		</div>
+    		<!-- Collect the nav links, forms, and other content for toggling -->
+    		<div class="collapse navbar-collapse" id="navbarCollapse">
+    			<ul class="nav navbar-nav">
+    				<li><a href="view_donations.htm">View Donation</a></li>
+    				<li class="active"><a href="donate">Submit Donation Form</a></li>
+    				<li><a href="createDonor">Donor Creation</a></li>
+    				<li><a href="BulkUpload.html">Bulk Upload</a></li>
+    			</ul>
+    		</div>
+    	</div>
+    </nav>
+
 
 
 <div class="container">
@@ -113,20 +116,31 @@ body{
       <div class="row-fluid">
         <h2 class="rw-sentence">
           DONATION FORM
-
-        </h2>
+        </h2> <br>
       </div>
     </div>
 
 
     <style type="text/css">
-p {
+ {
   padding: 25px 50px;
 }
     </style>
 
     <form class="form-horizontal" id="form1" name="form1" method="post" role="form">
 
+	    <div class="form-group col-xs-offset-2">
+			<label for="donor" class="control-label col-xs-5">Select Donor </label>
+			<div class="col-md-2 dropdown">
+				<select class="form-control col-md-4 " name="donor" onChange="dropdownChange(this.value)">
+					{% for donor in donors %}
+				<option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<a type="button" class="btn btn-success btn-s" href="createDonor"> Add </a>
+		</div>
+			
       <div class="form-group">
         <label for="donationDate" class="control-label col-xs-5">Donation Date </label>
         <div class="col-md-2">
@@ -153,18 +167,6 @@ p {
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="donor" class="control-label col-xs-5">Select Donor </label>
-        <div class="col-md-2 dropdown">
-          <select class="form-control col-md-4" name="donor" onChange="dropdownChange(this.value)">
-            {% for donor in donors %}
-            <option value="{{ donor.email_address }}">{{ donor.email_address }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <a type="button" class="btn btn-success btn-s" href="createDonor">
-          Add
-        </a>
 
       <div id="cheque" style="display:none">
         <div class="form-group">
@@ -180,7 +182,6 @@ p {
             <input type="number" class="form-control" id="chequeNumber" name="chequeNumber">
           </div>
         </div>
-
       </div>
 
       <div id="internet" style="display:none">
@@ -192,18 +193,40 @@ p {
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="control-label col-xs-5">
-	<input type="checkbox" name="download_pdf" value="download_pdf">Download receipt<br>
-        <input type="checkbox" name="email_pdf" value"email_pdf">Send Email<br>
-          <p>
+	    <div class="form-group col-sm-offset-2">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label class="col-sm-offset-4 col-sm-14 ">
+          <input type="checkbox" name="download_pdf" value="download_pdf">Download receipt<br>
+		  <input type="checkbox" name="email_pdf" value="email_pdf">Send Email<br>
+		  
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary col-sm-offset-4">Submit</button>
+    </div>
+  </div>
+  
+     
+
+      <!--  <div class="control-label col-xs-6 col-xs-offset-1">
+		<p>
+			<input type="checkbox" name="download_pdf" value="download_pdf">Download receipt<br>
+			<input type="checkbox" name="email_pdf" value="email_pdf">Send Email<br>
+		</p>
+          <br><p>
           <button type="submit" class="btn btn-primary btn-s" name="formSubmit" onClick="onSubmit()">Submit</button>
-          <!--button type="submit" class="btn btn-primary btn-s" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
-          <button type="submit" class="btn btn-primary btn-s" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button-->
+          button type="submit" class="btn btn-primary btn-s" name="formSubmitAndDownload" onClick="onSubmitAndDownload()" >Submit and Download e-Receipt</button>
+          <button type="submit" class="btn btn-primary btn-s" name="formSubmitAndSend" onClick="onSubmitAndSend()">Submit and Send e-Receipt</button
           </p>
         </div>
-      </div>
+      -->
+	  
     </form>
+  </div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
