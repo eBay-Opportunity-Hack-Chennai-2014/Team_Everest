@@ -5,8 +5,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, validators
 import sys
-sys.path.append("..")
-from modules.login_manager import loginManager
+from login_manager import lm
 from models import db, Donor, Donation
 import tempfile
 from num2words import num2words
@@ -33,7 +32,7 @@ from emailHelper import sendEmail
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 
-@loginManager.user_loader
+@lm.user_loader
 def load_user(userid):
   print 'Load user being done '
   donor = Donor.query.filter_by(email_address=userid).first()
@@ -67,17 +66,17 @@ def donor_creation_page():
 @login_required
 def view_donations():
     #email = session.get('email')
-    email = "Mr.X"
+    email = "admin@gmail.com"
     if request.method == 'GET':
-        donor = db.session.query.filter_by(email_address = email).first()
+        donor = Donor.query.filter_by(email_address = email).first()
         if donor.is_admin:
-            donations=Donation.query.all()
+            donations = Donation.query.all()
         else:
             donations = donor.donations
         return render_template('view_donations.htm', donations=donations)
     elif request.method == 'POST':
         donation_ids = request.form.keys()
-        donor = db.session.query.filter_by(email_address = email).first()
+        donor = Donor.query.filter_by(email_address = email).first()
         if donor.is_admin:
             donations=Donation.query.filter(Donation.id.in_(donation_ids)).all()
         else:
