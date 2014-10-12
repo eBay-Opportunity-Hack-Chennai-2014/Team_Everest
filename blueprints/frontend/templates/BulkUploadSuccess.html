@@ -27,11 +27,11 @@
     		<!-- Collect the nav links, forms, and other content for toggling -->
     		<div class="collapse navbar-collapse" id="navbarCollapse">
     			<ul class="nav navbar-nav">
-    				<li><a href="donations">View Donation</a></li>
-    				<li><a href="donate">Submit Donation Form</a></li>
-    				<li><a href="createDonor">Donor Creation</a></li>
-    				<li><a href="backend/excel">Bulk Upload</a></li>
-    				<li><a href="logout">Logout</a></li>
+    				<li><a href="/donations">View Donation</a></li>
+    				<li><a href="/donate">Submit Donation Form</a></li>
+    				<li><a href="/createDonor">Donor Creation</a></li>
+    				<li><a href="{{ url_for('backend.upload') }}">Bulk Upload</a></li>
+    				<li><a href="/logout">Logout</a></li>
     			</ul>
     		</div>
     	</div>
