@@ -1,5 +1,4 @@
 from __future__ import with_statement
-from inmemoryzip import InMemoryZip
 import tempfile
 from num2words import num2words
 from xhtml2pdf import pisa
