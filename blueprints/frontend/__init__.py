@@ -79,7 +79,7 @@ def fun(s):
             return int(s)
     except Exception:
         return None
-@frontend.route('donations/', methods=['GET','POST'])
+@frontend.route('donations', methods=['GET','POST'])
 @login_required
 def view_donations():
     #email = 'arunpandianp@gmail.com'
