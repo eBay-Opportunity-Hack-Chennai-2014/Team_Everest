@@ -14,41 +14,35 @@
         <div class="form-group">
 
 	<table class="table table-bordered">
-	    <thead>
-	    <tr>
-			<th data-field="donorname">Donor Name</th>
-			<th data-field="phno">Contact No.</th>
-			<th data-field="email">Email</th>
+	     <thead>
+	     <tr>
+			<th data-field="name">Donor Name</th>
+			<th data-field="contact_number">Contact No.</th>
+			<th data-field="email_address">Email</th>
 			<th data-field="address">Address</th>
-			<th data-field="town">Town/City</th>
-			<th data-field="country">Country</th>
 			<th data-field="date">Donation Date</th>
 			<th data-field="amount">Donation Amount</th>
 			<th data-field="mode">Mode of Payment</th>
+			<th data-field="cheque_number">Cheque Number</th>
+			<th data-field="cheque_date">Cheque Date</th>	
+			<th data-field="transaction_id">Transaction Id</th>	
+	       </tr>
+    	       </thead>
+{% for record in records %}
+	     <tr>
+			<th data-field="name">{{ record.DonorName }}</th>
+			<th data-field="contact_number">{{ record.ContactNo }}</th>
+			<th data-field="email_address">{{ record.Email }}</th>
+			<th data-field="address">{{ record.Address }}</th>
+			<th data-field="date">{{ record.DonationDate }}</th>
+			<th data-field="amount">{{ record.DonationAmount }}</th>
+			<th data-field="mode">{{ reocord.ModeofPayment }}</th>
+			<th data-field="cheque_number">{{ record.ChequeNumber }}</th>
+			<th data-field="cheque_date">{{ record.ChequeDate }}</th>	
+			<th data-field="transaction_id">{{ record.TransactionId }}</th>	
 	    </tr>
-	    </thead>
-	    <tr>
-			<th data-field="donorname">Anand Krishnan</th>
-			<th data-field="phno">9840334433</th>
-			<th data-field="email">ank@abcd.com</th>
-			<th data-field="address">This is the address</th>
-			<th data-field="town">Chennai</th>
-			<th data-field="country">India</th>
-			<th data-field="date">12-12-2014</th>
-			<th data-field="amount">500.Rs</th>
-			<th data-field="mode">Cash</th>
-	    </tr>
-	    <tr>
-			<th data-field="donorname">Arun Krishnan</th>
-			<th data-field="phno">9845734433</th>
-			<th data-field="email">ark@abcd.com</th>
-			<th data-field="address">This is the address</th>
-			<th data-field="town">Chennai</th>
-			<th data-field="country">India</th>
-			<th data-field="date">12-10-2014</th>
-			<th data-field="amount">1000.Rs</th>
-			<th data-field="mode">Cheque</th>
-	    </tr>
+{% endfor %}
+
 	</table>
 	</div>
        </form>
