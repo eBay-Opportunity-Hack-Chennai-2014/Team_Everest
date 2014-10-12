@@ -68,7 +68,6 @@ def login():
     login_user(form.user)
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
-    # print request.args.get("next")
     return redirect(request.args.get("next") or url_for("frontend.donation_form_page"))
   return render_template("Login.html", form=form)
 
@@ -77,5 +76,6 @@ def donor_creation_page():
     return render_template('DonorCreation.html')
 
 @frontend.route('donations', methods=['GET'])
+@login_required
 def view_donations():
     return render_template('view_donations.htm', donations=Donation.query.all())
