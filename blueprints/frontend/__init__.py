@@ -48,8 +48,8 @@ def donation_form_page():
 @frontend.route("login", methods=["GET", "POST"])
 def login():
   form = request.form
-  print request.method
   if request.method == 'POST':
+
     donor = Donor.query.filter_by(email_address = form['email']).first()
     if donor is None:
       return redirect(url_for('.login'))
