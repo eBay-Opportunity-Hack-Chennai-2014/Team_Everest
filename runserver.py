@@ -10,7 +10,6 @@ app.config.from_object('default_settings')
 app.config.from_envvar('EVEREST_SETTINGS', silent=True)
 app.register_blueprint(frontend, url_prefix='/')
 app.register_blueprint(backend, url_prefix='/backend/')
-
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = set([ 'xls', 'xlsx', 'csv'])
 

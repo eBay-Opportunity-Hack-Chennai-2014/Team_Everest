@@ -18,7 +18,7 @@
       </div>
    <br>     <div class="checkbox">
 		  <label>
-		     <input type="checkbox"> Download in .zip format? </label>
+		     <input type="checkbox" onclick="if(this.checked) {this.form.action='/backend/excel?check=1'} else {this.form.action='/backend/excel'}"> Download in .zip format? </label>
         </div>
 
        <button type="submit" class="btn btn-primary">Submit</button>

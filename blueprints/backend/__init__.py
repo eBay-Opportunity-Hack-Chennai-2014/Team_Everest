@@ -1,4 +1,5 @@
 from __future__ import with_statement
+from inmemoryzip import InMemoryZip
 import tempfile
 from num2words import num2words
 from xhtml2pdf import pisa
@@ -109,6 +110,7 @@ def generate_zipped_receipts():
     headers = {"Content-Disposition": "attachment; filename=receipt.zip"}
     return make_response((response_body,'200', headers))
 
+
 """take a list of file names and return a fd for the zipped file"""
 def zipFiles(files):
     s = str(random.randint(0,10000000))
@@ -116,6 +118,18 @@ def zipFiles(files):
     z = ZipFile(s, "w", ZIP_DEFLATED)
     for f in files:
         z.write(f, f.split('/')[-1])
+    z.close()
+    return s
+
+"""take a list of file names and return a fd for the zipped file"""
+def zipFilesFromSIO(sios):
+    s = str(random.randint(0,10000000))
+    s = "archivename"+s+".zip"    
+    z = ZipFile(s, "w", ZIP_DEFLATED)
+    i=0
+    for sio in sios:
+        i+=1
+        z.writestr(str(i)+".pdf",sio.getvalue() )
     z.close()
     return s
 
@@ -162,14 +176,26 @@ def upload():
             r = random.randint(0,10000000)
             file_name = os.path.join(current_app.config.get('UPLOAD_FOLDER'), str(r) + filename)
             file.save(os.path.join(file_name))
-            readExcel(file_name)
+            donation_ids = readExcel(file_name)
+            if(request.query_string.find("check=1")!=-1):
+                pdfs = []
+                for donation_id in donation_ids:
+                    pdf = create_receipt_pdf(donation_id)
+                    pdfs.append(pdf)
+                s = zipFilesFromSIO(pdfs)
+                response_body = open(s).read()
+                os.remove(s)
+                headers = {"Content-Disposition": "attachment; filename=receipt.zip"}
+                return make_response((response_body,'200', headers))
+            os.remove(file_name)
             return render_template("BulkUploadSuccess.html") 
     else:
             print "sda"
             return render_template("BulkUpload.html")
 
-
+#returns list of donation ids created
 def readExcel(inputFile):
+    donation_ids = []
     fields = {"DonationDate":"date","Amount":"amount","DonationMode":"mode","ModeDescription":"mode_description","DonorEmail":"email_address","Name":"name","ContactNo":"contact_number","Address":"address"}
     order_of_fields = {}
     workbook = xlrd.open_workbook(inputFile)
@@ -207,33 +233,22 @@ def readExcel(inputFile):
             raise Exception("no email");
         donor = get_donor_by_email(email)
         if not donor:
-            name = row[order_of_fields["Name"]]
-            if(name.xf_index == None):
-                name = None
-            address = row[order_of_fields["Address"]]
-            if(address.xf_index == None):
-                address = None
-            contact_number = row[order_of_fields["ContactNo"]]
-            if(contact_number.xf_index == None):
-                contact_number = None
+            name = row[order_of_fields["Name"]].value
+            address = row[order_of_fields["Address"]].value
+            contact_number = row[order_of_fields["ContactNo"]].value
             donor = Donor(email, name, contact_number, address)
-        date = row[order_of_fields["DonationDate"]]
-        if(date.xf_index == None):
-            date = None
-        amount = row[order_of_fields["Amount"]]
-        if(amount.xf_index == None):
-            amount = None
-        mode = row[order_of_fields["DonationMode"]]
-        if(mode.xf_index == None):
-            mode = None
-        mode_description = row[order_of_fields["ModeDescription"]]
-        if(mode_description.xf_index == None):
-            mode_description = None
+        date = row[order_of_fields["DonationDate"]].value
+        year, month, day, hour, minute, second = xlrd.xldate_as_tuple(date, workbook.datemode)
+	date = datetime.datetime(year, month, day, hour, minute, second)
+        amount = row[order_of_fields["Amount"]].value
+        mode = row[order_of_fields["DonationMode"]].value
+        mode_description = row[order_of_fields["ModeDescription"]].value
         donation = Donation(date, amount, mode, mode_description)
         donor.donations.append(donation)
         db.session.add(donor)
         db.session.commit()  
-        
+        donation_ids.append(donation.id)     
+    return donation_ids
 def get_donor_by_email(email):
     donor = db.session.query(Donor).filter_by(email_address = email)
     return donor.first()
