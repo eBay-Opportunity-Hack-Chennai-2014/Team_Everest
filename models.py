@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+import hashlib
 db = SQLAlchemy()
 
 class Donor(db.Model):

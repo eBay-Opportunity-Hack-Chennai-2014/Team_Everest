@@ -13,6 +13,7 @@ from xhtml2pdf import pisa
 from werkzeug import secure_filename
 from jinja2 import Template
 import os
+import hashlib
 import datetime
 import random
 import StringIO
@@ -40,6 +41,7 @@ def load_user(userid):
   return donor
 
 @frontend.route('donate', methods=['GET'])
+@login_required
 def donation_form_page():
     return render_template('DonationForm.html', donors=Donor.query.all())
 
@@ -49,6 +51,12 @@ def login():
   print request.method
   if request.method == 'POST':
     donor = Donor.query.filter_by(email_address = form['email']).first()
+    if donor is None:
+      return redirect(url_for('.login'))
+    if not donor.password_sha256 == hashlib.sha256(form['password']).hexdigest():
+      print donor.password_sha256
+      print hashlib.sha256(form['password']).hexdigest()
+      donor = None
     # login and validate the user...
     if donor is None:
       return redirect(url_for('.login'))
@@ -59,6 +67,7 @@ def login():
   return render_template("Login.html")
 
 @frontend.route('createDonor', methods=['GET'])
+@login_required
 def donor_creation_page():
     return render_template('DonorCreation.html')
 
