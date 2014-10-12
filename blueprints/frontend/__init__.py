@@ -56,7 +56,6 @@ def create_user():
   db.session.commit()
 
 @frontend.route('donate', methods=['GET'])
-@login_required
 def donation_form_page():
     return render_template('DonationForm.html', donors=Donor.query.all())
 
@@ -73,7 +72,6 @@ def login():
   return render_template("Login.html", form=form)
 
 @frontend.route('createDonor', methods=['GET'])
-@login_required
 def donor_creation_page():
     return render_template('DonorCreation.html')
 
