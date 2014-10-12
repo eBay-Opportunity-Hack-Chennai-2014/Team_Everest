@@ -25,10 +25,11 @@ backend = Blueprint('backend', __name__)
 
 @backend.route('create_donor/', methods=['POST'])
 def create_donor():
-    donor = Donor.query.filter_by(email_address=form['email']).first()
+    print(request.form)
+    donor = Donor.query.filter_by(email_address=request.form['email']).first()
     if donor is not None:
         abort(400)
-    donor = Donor(email_address=form['email'], name=form['name'], contact_number=form['contact_number'], address=form['address'])
+    donor = Donor(email_address=request.form['email'], name=request.form['name'], contact_number=request.form['contact_number'], address=request.form['address'])
     db.session.add(donor)
     db.session.commit()
     return redirect(request.referrer)

@@ -17,6 +17,25 @@ class Donor(db.Model):
         self.contact_number = contact_number
         self.address = address
 
+class User(db.Model):
+  __tablename__ =  'user'
+  """The internal user who wants to login"""
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(80))
+  password = db.Column(db.String(80))
+
+  def __init__(self, name, password):
+    self.name = name
+    self.password = password
+
+  def is_active(self):
+    return True
+
+  def is_authenticated(self):
+    return True
+
+  def get_id(self):
+    return self.name
 # class NGO(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     email_address = db.Column(db.String(80), unique=True)
