@@ -6,21 +6,11 @@ from email import Encoders
 
 #Email sending module. Takes 2 arguments, receiver mail id and the fileObject of attachment. Attachment is assumed to be on disk.
 
-def sendEmail(emailTo,attachmentFile):
+def sendEmail(emailTo, bodyText, attachmentFile):
   EMAIL_FROM =  "teameverest.ohack@gmail.com"
   EMAIL_SERVER = "smtp.gmail.com"
   SUBJECT = "Auto generated Receipt"
 
-  bodyText = '''Dear <NAME>,
-
-  Thank you for making a difference by donating Rs <Amount> on <Date> for Team Everest.  Please find your E-receipt attached with this email for your donation.
-
-  Keep making a difference.
-
-  Thanks & Regards,
-  Team Everest
-  www.teameverestindia.org
-  '''
   emailBody = MIMEText(bodyText,"plain")
   msg = MIMEMultipart()
   msg['Subject'] = SUBJECT
