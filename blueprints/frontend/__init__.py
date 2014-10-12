@@ -101,8 +101,7 @@ def donor_creation_page():
 @frontend.route('donations', methods=['GET','POST'])
 @login_required
 def view_donations():
-    #email = session.get('email')
-    email = "Mr.X"
+    email = current_user.email
     if request.method == 'GET':
         donor = db.session.query.filter_by(email_address = email).first()
         if donor.is_admin:
