@@ -15,10 +15,6 @@ app.secret_key = 'why would I tell you my secret key?'
 
 loginManager.init_app(app)
 
-@loginManager.user_loader
-def load_user(userid):
-  return db.Donor.get(userid)
-
 loginManager.login_view = '/login'
 
 db.init_app(app)

@@ -29,10 +29,14 @@ class User(db.Model):
     self.name = name
     self.password = password
 
-  def check_password(self, password):
-    return self.password is password
-    # hashlib.sha224(password).hexdigest()==self.password
+  def is_active(self):
+    return True
 
+  def is_authenticated(self):
+    return True
+
+  def get_id(self):
+    return self.name
 # class NGO(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     email_address = db.Column(db.String(80), unique=True)
