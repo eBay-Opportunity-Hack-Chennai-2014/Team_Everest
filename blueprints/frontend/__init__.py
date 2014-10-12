@@ -48,10 +48,10 @@ def login():
   form = request.form
   print request.method
   if request.method == 'POST':
-    print "Validation\n\n\n\n"
-
     donor = Donor.query.filter_by(email_address = form['email']).first()
     # login and validate the user...
+    if donor is None:
+      return redirect(url_for('.login'))
     login_user(donor)
     flash("Logged in successfully.")
     # print "hi"+type(url_for(".donor_form_page"))
