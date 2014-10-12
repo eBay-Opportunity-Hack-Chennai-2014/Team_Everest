@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<script type="text/javascript">
+
+function onSave()
+{
+    document.form1.action = "backend/create_donor/"
+    // document.Form1.target = "_blank";    // Open in a new window
+    document.form1.submit();             // Submit the page
+    return true;
+}
+
+function reset()
+{
+    document.getElementById("inputName").value = "";
+    document.getElementById("inputPhone").value = "";
+    document.getElementById("inputEmail").value = "";
+    document.getElementById("inputAddress").value = "";
+    document.getElementById("inputTown").value = "";
+    document.getElementById("inputCountry").value = "";
+}
+
+
+</script>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <style type="text/css">
+	    body{
+	    	padding-top: 70px;
+	    }
+    </style>
+  </head>
+
+<body>
+    <nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+    	<!-- Brand and toggle get grouped for better mobile display -->
+    	<div class="container">
+    		<div class="navbar-header">
+    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+    				<span class="sr-only">Toggle navigation</span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    				<span class="icon-bar"></span>
+    			</button>
+    			<a class="navbar-brand">E-receipt Tool</a>
+    		</div>
+    		<!-- Collect the nav links, forms, and other content for toggling -->
+    		<div class="collapse navbar-collapse" id="navbarCollapse">
+    			<ul class="nav navbar-nav">
+    				<li ><a href="donations">View Donation</a></li>
+    				<li ><a href="donate">Submit Donation Form</a></li>
+    				<li class="active"><a href="createDonor">Donor Creation</a></li>
+    				<li ><a href="backend/excel">Bulk Upload</a></li>
+    				<li><a href="logout">Logout</a></li>
+    			</ul>
+    		</div>
+    	</div>
+    </nav>
+
+    <div class="container">
+    <div class="jumbotron">
+
+              <div class="text-center">
+
+	<div class="row-fluid">
+	<h2 class="rw-sentence">
+	DONOR CREATION FORM
+
+	</h2>
+</div>
+</div>
+
+
+    <style type="text/css">
+p {
+    padding: 25px 50px;
+}
+</style>
+      <form class="form-horizontal" method="post" id="form1" name="form1" role="form">
+  <div class="form-group">
+    <label for="inputNameLabel" class="control-label col-xs-5">Name</label>
+    <div class="col-md-4">
+      <input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
+    </div>
+  </div>
+
+<div class="form-group">
+    <label for="inputPhoneLabel" class="control-label col-xs-5">Contact No:</label>
+    <div class="col-md-4">
+      <input type="tel" class="form-control" id="inputPhone" placeholder="Phone" name="contact_number">
+
+    </div>
+  </div>
+
+<div class="form-group">
+    <label for="inputEmailLabel" class="control-label col-xs-5">Email</label>
+    <div class="col-md-4">
+      <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email">
+    </div>
+  </div>
+
+<div class="form-group">
+    <label for="inputAddressLabel" class="control-label col-xs-5">Address</label>
+    <div class="col-md-4">
+      <textarea class="form-control" id="inputAddress" rows="4" placeholder="Address" name="address"></textarea>
+   </div>
+   </div>
+
+  <div class="form-group">
+    <div class="col-md-offset-4 col-md-10">
+      <button type="submit" class="btn btn-primary btn-s" onClick="onSave()">Save</button>
+      <button type="reset" class="btn btn-primary btn-s" onClick="resetButton()">Reset</button>
+    </div>
+  </div>
+</form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

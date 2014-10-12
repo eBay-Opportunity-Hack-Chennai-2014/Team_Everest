@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <div class="container">
+      </br></br></br></br></br></br>
+      <div class="col-md-offset-2 vert-offset-top-4">
+      <h2>Example Template</h2>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+
+	<table class="table table-bordered">
+	     <thead>
+	     <tr>
+			<th data-field="name">Donor Name</th>
+			<th data-field="contact_number">Contact No.</th>
+			<th data-field="email_address">Email</th>
+			<th data-field="address">Address</th>
+			<th data-field="date">Donation Date</th>
+			<th data-field="amount">Donation Amount</th>
+			<th data-field="mode">Mode of Payment</th>
+			<th data-field="cheque_number">Cheque Number</th>
+			<th data-field="cheque_date">Cheque Date</th>	
+			<th data-field="transaction_id">Transaction Id</th>	
+	       </tr>
+    	       </thead>
+{% for record in records %}
+	     <tr>
+			<th data-field="name">{{ record.DonorName }}</th>
+			<th data-field="contact_number">{{ record.ContactNo }}</th>
+			<th data-field="email_address">{{ record.Email }}</th>
+			<th data-field="address">{{ record.Address }}</th>
+			<th data-field="date">{{ record.DonationDate }}</th>
+			<th data-field="amount">{{ record.DonationAmount }}</th>
+			<th data-field="mode">{{ reocord.ModeofPayment }}</th>
+			<th data-field="cheque_number">{{ record.ChequeNumber }}</th>
+			<th data-field="cheque_date">{{ record.ChequeDate }}</th>	
+			<th data-field="transaction_id">{{ record.TransactionId }}</th>	
+	    </tr>
+{% endfor %}
+
+	</table>
+	</div>
+       </form>
+   </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
