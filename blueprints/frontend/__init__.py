@@ -60,7 +60,7 @@ def login():
   if request.method == 'POST':
     print "Validation\n\n\n\n"
 
-    donor = Donor.query.filter_by(email = form['email'])
+    donor = Donor.query.filter_by(email_address=form['email'])
     print form['email']
     print form['password']
 
