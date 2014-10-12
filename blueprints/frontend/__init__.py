@@ -6,9 +6,7 @@ from wtforms import TextField, PasswordField, validators
 import sys
 sys.path.append("..")
 from modules.login_manager import loginManager
-from models import db, User
-
-from models import Donor
+from models import db, Donor, Donation, User
 
 frontend = Blueprint('frontend', __name__,
         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
@@ -60,7 +58,7 @@ def create_user():
 @frontend.route('donate', methods=['GET'])
 @login_required
 def donation_form_page():
-    return render_template('DonationForm.html', donors = Donor.query.all())
+    return render_template('DonationForm.html', donors=Donor.query.all())
 
 @frontend.route("login", methods=["GET", "POST"])
 def login():
@@ -81,6 +79,5 @@ def donor_creation_page():
     return render_template('DonorCreation.html')
 
 @frontend.route('donations', methods=['GET'])
-@login_required
 def view_donations():
-    return render_template('view_donations.htm')
+    return render_template('view_donations.htm', donations=Donation.query.all())
