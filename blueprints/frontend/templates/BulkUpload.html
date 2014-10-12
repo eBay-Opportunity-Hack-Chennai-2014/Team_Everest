@@ -60,40 +60,37 @@ p {
 
 
       <div class="form-group">
-	  		  <label for="pwd" class="col-xs-5 control-label"><h4>View the Upload Template File:</h4></label>
-	  	    <div class="col-md-4">
-	  		  <a href="details.xlsx" target="_blank"><h4>Template.csv</h4></a >
-         </div>
-        </div>
+		<label for="pwd" class="col-xs-5 control-label"><h4>View the Upload Template File:</h4></label>
+		<a href="Template.xlsx" class="col-xs-1 control-label" target="_blank"><h4>Template.xlsx</h4></a >
+      </div>
 
-        <div class="form-group">
+      <div class="form-group">
 
       <label for="upload" class="col-xs-5 control-label">File Upload:</label>
 
-      <form method="post" class="form-horizontal" role="form" enctype="multipart/form-data">
-          <input type="file" name="file" id="txtFileUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+      <form method="post" class="col-xs-5 control-label" role="form" enctype="multipart/form-data">
+          <input type="file" class="col-xs-5 control-label" name="file" id="txtFileUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         </div>
 
 
    <br>
 
-        <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-10">
+	<div class="form-group">
+	<div class="col-sm-offset-4 col-sm-8">
 
-   <div class="checkbox col-xs-5">
-		  <label>
-		     <input type="checkbox" onclick="if(this.checked) {this.form.action='/backend/excel?check=1'} else {this.form.action='/backend/excel'}"> Download in .zip format? </label>
-        </div>
-</div>
+	  <div class="checkbox col-xs-5 control-label">
+		 <label><input type="checkbox" onclick="if(this.checked) {this.form.action='/backend/excel?check=1'} else {this.form.action='/backend/excel'}"> Download in .zip format? </label>
+	  </div>
+	</div>
 	</div>
 
 
-	      <div class="form-group">
-	         <div class="col-md-offset-2 col-md-10">
-            <p>
-       <button type="submit" class="btn btn-primary">Submit</button>
-                   </p>
-	            </div>
+	 <div class="form-group">
+		 <div class="col-sm-offset-4 col-sm-8">
+		<p>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</p>
+	 </div>
       </div>
       </form>
 </form>
