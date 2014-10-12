@@ -1,3 +1,5 @@
+import hashlib
+
 from flask import Flask,session
 
 from blueprints.frontend import frontend
@@ -22,8 +24,8 @@ lm.login_view = '/login'
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        if Donor.query.find_all(email_address="admin").first() is None:
-            donor = Donor(email_address='admin', password_sha256=hashlib.sha256('1111').hexdigits(), is_admin=True)
+        if Donor.query.filter_by(email_address="admin").first() is None:
+            donor = Donor(email_address='admin', password_sha256=hashlib.sha256('1111').hexdigest(), is_admin=True)
             db.session.add(donor)
             db.session.commit()
     app.run(host='0.0.0.0', port=8000)
