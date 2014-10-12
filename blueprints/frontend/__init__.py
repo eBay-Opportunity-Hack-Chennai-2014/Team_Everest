@@ -63,24 +63,35 @@ def login():
 def donor_creation_page():
     return render_template('DonorCreation.html')
 
+def fun(s):
+    try:
+        if(s[-1]=='/'):
+            return int(s[:-1])
+        else:
+            return int(s)
+    except Exception:
+        return None
 @frontend.route('donations', methods=['GET','POST'])
 @login_required
 def view_donations():
+    #email = 'arunpandianp@gmail.com'
     email = current_user.email
     if request.method == 'GET':
-        donor = db.session.query.filter_by(email_address = email).first()
+        donor = db.session.query(Donor).filter_by(email_address = email).first()
         if donor.is_admin:
             donations=Donation.query.all()
         else:
             donations = donor.donations
         return render_template('view_donations.htm', donations=donations)
     elif request.method == 'POST':
-        donation_ids = request.form.keys()
-        donor = db.session.query.filter_by(email_address = email).first()
+        print request.args
+        donation_ids = map(lambda x : fun(x),request.form.keys())
+        print donation_ids
+        donor = db.session.query(Donor).filter_by(email_address = email).first()
         if donor.is_admin:
             donations=Donation.query.filter(Donation.id.in_(donation_ids)).all()
         else:
-            donations = donor.donations
+            donations = donor.donations.all()
             donor_donation_ids = set(map(lambda x: x.id, donations))
             donor_accessible_donation_ids = []
             for i in donation_ids:
@@ -88,12 +99,13 @@ def view_donations():
                     donor_accessible_donation_ids.append(i)
             donation_ids = donor_accessible_donation_ids
             donations=Donation.query.filter(Donation.id.in_(donation_ids)).all()
-            return generate_zipped_receipts(donations)
+            print donations
+            return generate_zipped_receipts(donor, donations)
 
-def generate_zipped_receipts(donations):
+def generate_zipped_receipts(donor, donations):
     pdfFiles = []
     for donation in donations:
-        data = {'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "chennai", 'DonationMode': donation.mode, 'DonorName':donor.first().name, 'DonorAddress' : donor.first().address, 'Certification_Number' : "213213dsfdaf3", "WordAmount":num2words(donation.amount) }
+        data = {'Amount':donation.amount, 'ReceiptNo':donation.id, 'DonationDate': donation.date, 'OrgName': "Team Everest", 'OrgAddress': "chennai", 'DonationMode': donation.mode, 'DonorName':donor.name, 'DonorAddress' : donor.address, 'Certification_Number' : "213213dsfdaf3", "WordAmount":num2words(donation.amount) }
         pdf = makePdf(data)
         pdfFiles.append(pdf)
     s = zipFiles(pdfFiles)

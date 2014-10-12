@@ -109,8 +109,6 @@ $(document).ready(function() {
 
           </tbody>
         </table>
-	<input type="submit">
-	</form>
       </div>
     </div>
 
@@ -128,10 +126,12 @@ $(document).ready(function() {
   </br></br></br>
   <div class="col-md-3 col-md-offset-8">
     <p>
-    <button type="submit" class="btn btn-primary">Download as Zip</button>
+    <button type="submit" onclick="this.form.submit()" class="btn btn-primary">Download as Zip</button>
 
-    <button type="submit" class="btn btn-primary">Send Email</button> </p>
+    <button type="submit" onclick="this.form.action='donations/?email=1'; this.form.submit()" class="btn btn-primary">Send Email</button> </p>
+
   </div>
 
+	</form>
 
   </body></html>
