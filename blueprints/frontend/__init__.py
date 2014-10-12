@@ -66,6 +66,11 @@ def login():
     return redirect(request.args.get("next") or url_for("frontend.view_donations"))
   return render_template("Login.html")
 
+@frontend.route('logout', methods=['GET'])
+def logout():
+    logout_user()
+    return redirect('login')
+
 @frontend.route('createDonor', methods=['GET'])
 @login_required
 def donor_creation_page():
