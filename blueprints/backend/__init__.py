@@ -52,17 +52,32 @@ def create_donation(form):
     return donation
 
 @backend.route('create_donation/', methods=['POST'])
-def create_donation_and_return():
+def create_donation():
     donation = create_donation(request.form)
-    return redirect(request.referrer)
+    if not request.form['download_pdf'] and not request.form['email_pdf']:
+        return redirect(request.referrer)
+    strIO = create_receipt_pdf(donation.id)
+    if request.form['email_pdf']:
+        if strIO is not None:
+            strIO.seek(0)
+            sendEmail(donation.donor.email_address, strIO)
+        else:
+            abort(400)
+    if request.form['download_pdf']:
+        if strIO is not None:
+            strIO.seek(0)
+            return send_file(strIO, attachment_filename='{}-{}.pdf'.format(donation.donor.email_address, donation.id), as_attachment=True)
+        else:
+            abort(400)
+    else:
+        return redirect(request.referrer)
+
 
 @backend.route('create_donation_and_return_pdf/', methods=['POST'])
 def create_donation_and_return_pdf():
     donation = create_donation(request.form)
-    strIO = create_receipt_pdf(donation.id)
     if strIO is not None:
         strIO.seek(0)
-        return send_file(strIO, attachment_filename='{}.pdf'.format(donation.id), as_attachment=True)
     else:
         abort(400)
 
@@ -71,8 +86,6 @@ def create_donation_and_email_pdf():
     donation = create_donation(request.form)
     strIO = create_receipt_pdf(donation.id)
     if strIO is not None:
-        strIO.seek(0)
-        sendEmail(donation.donor.email_address, strIO)
         return redirect(request.referrer)
     else:
         abort(400)
